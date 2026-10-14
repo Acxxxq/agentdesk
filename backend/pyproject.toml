@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agentdesk"
+version = "0.1.0"
+description = "Task-aware enterprise agent support platform foundation"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "fastapi>=0.115,<1",
+  "uvicorn[standard]>=0.30,<1",
+  "pydantic>=2.7,<3",
+  "pydantic-settings>=2.4,<3",
+  "sqlalchemy[asyncio]>=2.0,<3",
+  "asyncmy>=0.2.9,<1",
+  "alembic>=1.13,<2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "ruff>=0.9,<1", "httpx>=0.27,<1"]
+llm = ["openai>=1.50,<3"]
+rag = ["pymilvus>=2.6,<2.7"]
+cache = ["redis>=5,<8"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agentdesk"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100

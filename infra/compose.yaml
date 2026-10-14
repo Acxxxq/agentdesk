@@ -1,0 +1,48 @@
+name: agentdesk
+
+services:
+  mysql:
+    image: mysql:8.4
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_0900_ai_ci"]
+    environment:
+      MYSQL_DATABASE: support
+      MYSQL_USER: support
+      MYSQL_PASSWORD: support_dev_only
+      MYSQL_ROOT_PASSWORD: root_dev_only
+    ports:
+      - "127.0.0.1:53306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-usupport", "-psupport_dev_only"]
+      interval: 5s
+      retries: 20
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "127.0.0.1:56379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 20
+
+  api:
+    build:
+      context: ../backend
+    environment:
+      APP_ENV: development
+      DATABASE_URL: mysql+asyncmy://support:support_dev_only@mysql:3306/support?charset=utf8mb4
+    ports:
+      - "127.0.0.1:18000:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  mysqldata:
+  redisdata:
