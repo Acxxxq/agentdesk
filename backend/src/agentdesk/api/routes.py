@@ -102,8 +102,11 @@ async def create_turn(conv_id: str, body: TurnIn, session: SessionDep, actor: Ac
         decision = DialogueManager().handle(ConversationState.model_validate(conv.state), body.message)
         turn = Turn(id=str(uuid4()), conversation_id=conv_id, request_id=body.request_id,
                     input_message=body.message, action=decision.action.value, response=decision.response)
+        # No ORM relationships are configured, so establish the parent row before
+        # inserting messages. Flush remains inside the same atomic transaction.
+        session.add(turn)
+        await session.flush()
         session.add_all([
-            turn,
             Message(conversation_id=conv_id, turn_id=turn.id, role="user", content=body.message),
             Message(conversation_id=conv_id, turn_id=turn.id, role="assistant", content=decision.response),
         ])

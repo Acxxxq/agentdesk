@@ -1,0 +1,204 @@
+name: agentdesk
+
+x-api-build: &api-build
+  context: ./backend
+  target: runtime
+
+x-api-environment: &api-environment
+  APP_ENV: development
+  DATABASE_URL: mysql+asyncmy://support:${MYSQL_PASSWORD:?Generate .env first}@mysql:3306/support?charset=utf8mb4
+  REDIS_URL: redis://:${REDIS_PASSWORD:?Generate .env first}@redis:6379/0
+  MILVUS_URI: http://milvus:19530
+  OBJECTSTORE_ENDPOINT: document-minio:9000
+  OBJECTSTORE_ACCESS_KEY: ${DOCUMENT_MINIO_USER:?Generate .env first}
+  OBJECTSTORE_SECRET_KEY: ${DOCUMENT_MINIO_PASSWORD:?Generate .env first}
+  OBJECTSTORE_BUCKET: agentdesk-documents
+  OBJECTSTORE_SECURE: "false"
+
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_0900_ai_ci"]
+    environment:
+      MYSQL_DATABASE: support
+      MYSQL_USER: support
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Generate .env first}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Generate .env first}
+      TZ: UTC
+    ports:
+      - "127.0.0.1:${MYSQL_PORT:-53306}:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=\"$$MYSQL_PASSWORD\" mysql -h 127.0.0.1 -usupport -D support -e 'SELECT 1' >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 40s
+
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?Generate .env first}
+    command: ["sh", "-c", "exec redis-server --appendonly yes --requirepass \"$$REDIS_PASSWORD\""]
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-56379}:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=\"$$REDIS_PASSWORD\" redis-cli ping | grep -q PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.25
+    restart: unless-stopped
+    environment:
+      ETCD_AUTO_COMPACTION_MODE: revision
+      ETCD_AUTO_COMPACTION_RETENTION: "1000"
+      ETCD_QUOTA_BACKEND_BYTES: "4294967296"
+      ETCD_SNAPSHOT_COUNT: "50000"
+    command: ["etcd", "-advertise-client-urls=http://etcd:2379", "-listen-client-urls", "http://0.0.0.0:2379", "--data-dir", "/etcd"]
+    volumes:
+      - etcddata:/etcd
+    healthcheck:
+      test: ["CMD", "etcdctl", "endpoint", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  milvus-minio:
+    image: milvusdb/minio:RELEASE.2024-12-18T13-15-44Z
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: ${MILVUS_MINIO_USER:?Generate .env first}
+      MINIO_ROOT_PASSWORD: ${MILVUS_MINIO_PASSWORD:?Generate .env first}
+    command: ["server", "/data", "--console-address", ":9001"]
+    volumes:
+      - milvusminiodata:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  milvus:
+    image: milvusdb/milvus:v2.6.24
+    restart: unless-stopped
+    command: ["milvus", "run", "standalone"]
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      ETCD_ENDPOINTS: etcd:2379
+      MINIO_ADDRESS: milvus-minio
+      MINIO_PORT: "9000"
+      MINIO_ACCESS_KEY_ID: ${MILVUS_MINIO_USER:?Generate .env first}
+      MINIO_SECRET_ACCESS_KEY: ${MILVUS_MINIO_PASSWORD:?Generate .env first}
+      MINIO_REGION: us-east-1
+    volumes:
+      - milvusdata:/var/lib/milvus
+      - ./infra/milvus.yaml:/milvus/configs/user.yaml:ro
+    ports:
+      - "127.0.0.1:${MILVUS_PORT:-29530}:19530"
+      - "127.0.0.1:${MILVUS_WEBUI_PORT:-29091}:9091"
+    depends_on:
+      etcd:
+        condition: service_healthy
+      milvus-minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9091/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 120s
+
+  document-minio:
+    image: milvusdb/minio:RELEASE.2024-12-18T13-15-44Z
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: ${DOCUMENT_MINIO_USER:?Generate .env first}
+      MINIO_ROOT_PASSWORD: ${DOCUMENT_MINIO_PASSWORD:?Generate .env first}
+    command: ["server", "/data", "--console-address", ":9001"]
+    ports:
+      - "127.0.0.1:${DOCUMENT_MINIO_PORT:-19000}:9000"
+      - "127.0.0.1:${DOCUMENT_MINIO_CONSOLE_PORT:-19001}:9001"
+    volumes:
+      - documentminiodata:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  migrate:
+    build: *api-build
+    environment: *api-environment
+    command: ["python", "-m", "alembic", "upgrade", "head"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: "no"
+
+  bucket-init:
+    build: *api-build
+    environment: *api-environment
+    command: ["python", "-m", "agentdesk.infrastructure.initialize_storage"]
+    depends_on:
+      document-minio:
+        condition: service_healthy
+    restart: "no"
+
+  api:
+    build: *api-build
+    environment: *api-environment
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${API_PORT:-18000}:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      bucket-init:
+        condition: service_completed_successfully
+        required: false
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready', timeout=5)"]
+      interval: 10s
+      timeout: 6s
+      retries: 10
+      start_period: 20s
+
+  tests:
+    profiles: ["test"]
+    build:
+      context: ./backend
+      target: development
+    environment:
+      APP_ENV: test
+    command: ["sh", "-c", "python -m pytest -q && python -m ruff check . && python -m alembic upgrade head --sql >/dev/null"]
+
+  attu:
+    profiles: ["admin"]
+    image: zilliz/attu:v3.0.1
+    restart: unless-stopped
+    environment:
+      MILVUS_ADDRESS: milvus:19530
+    ports:
+      - "127.0.0.1:${ATTU_PORT:-13000}:3000"
+    volumes:
+      - attudata:/data
+    depends_on:
+      milvus:
+        condition: service_healthy
+
+volumes:
+  mysqldata:
+  redisdata:
+  etcddata:
+  milvusminiodata:
+  milvusdata:
+  documentminiodata:
+  attudata:

@@ -6,11 +6,11 @@
 |---|---|---|
 | Architecture | Modular monolith + replaceable Ports/Adapters | Easy local deployment and debugging; preserves extraction boundary |
 | Runtime | Python 3.12 / FastAPI / Pydantic v2 | Type-safe APIs; matches existing learning path |
-| Dependencies | venv / pip / pyproject.toml | Isolated local environment with matching CI install commands; dependency locking is planned |
+| Dependencies | Docker / pip / pyproject.toml | Containerized runtime, development and CI test environments; dependency locking is planned |
 | Transactional data | MySQL 8.4 / SQLAlchemy 2 async (`asyncmy`) / Alembic | Familiar transactional store for auth, ownership, conversation state, task events and idempotency |
 | Ephemeral + events | Redis | Cache/rate limiting/short-lived streams; never only durable state holder |
-| RAG vector store | Existing Milvus 2.6.x, accessed via gateway adapter | Already deployed, supports filtered/vector and hybrid search |
-| Docs and attachments | MinIO (phase 2) | Object storage for file originals, outside vector DB |
+| RAG vector store | Isolated Milvus 2.6.24 + etcd + dedicated MinIO | Reproducible Compose deployment with embedded Woodpecker; existing Milvus data stays separate |
+| Docs and attachments | Separate document MinIO | Independent credentials, volumes and document bucket; file pipeline comes later |
 | Agent | Explicit dialogue/task state machine + bounded tool loop (phase 2) | Predictable business transitions and readable interview-ready internals |
 | Model | OpenAI-compatible API through own ModelGateway | Start with one model; configurable provider, trace, token and timeout budget |
 | UI | React + Vite + TypeScript + Tailwind/shadcn (phase 2) | Lightweight interactive customer + operator console |

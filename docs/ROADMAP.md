@@ -16,7 +16,7 @@
 - End-to-end scenarios and integration tests against a test MySQL instance
 
 ## P2 — RAG + customer experience
-- Reuse *existing* Milvus, collection versioning and tenant filters
+- Integrate the isolated Compose Milvus, collection versioning and tenant filters
 - File pipeline + MinIO; hybrid search, rerank, evidence citations
 - Frontend customer chat + operator traces + tool approval UI
 - SSE streaming, reconnect using persisted event IDs (no false replay promises)

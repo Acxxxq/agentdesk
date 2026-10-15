@@ -21,3 +21,27 @@ adapter, RAG or frontend yet. MySQL integration still needs live validation.
 
 For each meaningful milestone, record the date, problem, change, validation,
 and next step. Link the corresponding issue or pull request when available.
+
+## 2026-10-14 — Unified Docker development environment
+
+- Integrated the supplied infrastructure starter into the existing AgentDesk API.
+- Moved Compose to the repository root; added source reload and container tests.
+- Added independent Milvus/etcd/internal MinIO and document MinIO instances.
+- Explicitly selected embedded Woodpecker with a compatible MinIO image.
+- Added random local credentials, one-shot migration and document bucket setup.
+- Separated process liveness, MySQL readiness and optional dependency diagnostics.
+- Switched CI and contributor instructions to the container test workflow.
+- Live MySQL validation exposed message inserts preceding their parent turn;
+  an explicit flush now establishes the turn within the same transaction.
+- Added an opt-in running-stack API regression alongside the offline tests.
+
+### 2026-10-15 — Final Docker validation
+
+- Runtime, migration, bucket initializer and development/test images built successfully.
+- All 14 tests passed with the live MySQL/API regression enabled; Ruff and
+  offline MySQL migration generation passed.
+- MySQL, Redis, Milvus and document bucket connectivity checks returned `ok`.
+- Conversation state survived recreation of the MySQL and API containers.
+- Added the missing editable-install build dependency and documented Attu's
+  local administrator setup at `/login`.
+- The test client emits one upstream HTTPX deprecation warning; tests pass.

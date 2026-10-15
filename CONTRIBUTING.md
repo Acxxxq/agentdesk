@@ -1,25 +1,26 @@
 # Contributing to AgentDesk
 
-AgentDesk is under active development. Start with the README and
-[roadmap](docs/ROADMAP.md). Open an issue describing the problem and expected
-behavior before proposing a large architectural change.
+Start with the README and [roadmap](docs/ROADMAP.md). Open an issue describing
+the problem and expected behavior before proposing a large architectural change.
 
-## Local development
+## Development environment
 
-Use Python 3.12 or 3.13. From `backend/`:
+Use Git and Docker. Generate the root `.env` as described in the README, then:
 
 ```bash
-python -m venv .venv
-# Linux/macOS: source .venv/bin/activate
-# Windows PowerShell: .\.venv\Scripts\Activate.ps1
-python -m pip install -e ".[dev]"
-python -m pytest -q
-python -m ruff check .
+docker compose -f compose.yaml -f compose.dev.yaml up -d --build --wait
+docker compose --profile test build tests
+docker compose --profile test run --rm --no-deps tests
 ```
 
-Domain tests run without MySQL or model credentials. To run the API, follow
-the Docker Compose instructions in the README. Compose credentials are local
-development examples; keep real credentials and customer data out of commits.
+Changes under `backend/src/` reload automatically. Dependency changes require
+rebuilding the images. When tests change, rebuild the test image as well.
+The test command runs pytest, Ruff and offline MySQL migration SQL generation.
+It does not require model credentials or running databases.
+
+Keep real credentials and customer data out of commits. `.env.example` contains
+placeholders; the generated root `.env` is ignored by Git and excluded from
+Docker build contexts.
 
 ## Changes and development records
 
@@ -27,6 +28,6 @@ development examples; keep real credentials and customer data out of commits.
 - Describe the problem, resulting behavior and validation in pull requests.
 - Document architectural decisions in `docs/ADR-*.md`.
 - Add meaningful milestones and lessons to `docs/DEVLOG.md`.
-- Run the existing tests and lint checks before submitting a pull request.
+- Run the container checks before submitting a pull request.
 
 Contributions are licensed under the project's MIT License.

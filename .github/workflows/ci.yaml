@@ -1,18 +1,22 @@
-name: backend-checks
+name: docker-checks
 on:
   push:
   pull_request:
+permissions:
+  contents: read
 jobs:
   test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - run: python -m pip install -e '.[dev]'
-      - run: pytest -q
-      - run: ruff check .
+      - name: Generate local test configuration
+        run: docker run --rm --mount "type=bind,source=${PWD},target=/workspace" -w /workspace python:3.12-slim python scripts/generate_env.py
+      - name: Validate Compose configurations
+        run: |
+          docker compose config --quiet
+          docker compose -f compose.yaml -f compose.dev.yaml config --quiet
+      - name: Build test environment
+        run: docker compose build tests
+      - name: Run tests, lint and offline MySQL migration check
+        run: docker compose --profile test run --rm --no-deps tests

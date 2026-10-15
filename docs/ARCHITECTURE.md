@@ -11,8 +11,8 @@ flowchart TD
     ORCH --> LLM[Model Gateway]
     ORCH --> TOOLS[Tool Registry + execution ledger]
     ORCH --> RAG[RAG Gateway]
-    RAG --> MILVUS[(Milvus existing instance)]
-    RAG --> OBJ[(MinIO future)]
+    RAG --> MILVUS[(AgentDesk Milvus instance)]
+    RAG --> OBJ[(Document MinIO)]
     ORCH --> STORE
     API --> REDIS[(Redis: cache / stream future)]
     ORCH --> OTEL[OTel + Langfuse future]
@@ -32,6 +32,8 @@ flowchart TD
 - MySQL: tenant/user/conversation relationships; messages; turns with unique `request_id`; JSON State with version; task audit entries.
 - Redis: later sessions cache, stream replay, short-lived locks. Do not store the *only copy* of task state in Redis.
 - Milvus: chunks and embeddings only; source document metadata in MySQL, originals in MinIO.
+- Compose provides isolated infrastructure for Milvus and document storage;
+  RAG indexing/retrieval and file upload use cases are not implemented yet.
 - Streaming SSE: separate *durable business events* from *ephemeral model token chunks*; implement persisted stream cursor before claiming reconnect replay.
 
 ## Future run lifecycle (not implemented in starter)

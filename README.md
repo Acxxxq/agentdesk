@@ -1,84 +1,98 @@
-# AgentDesk — Enterprise Agent Platform (foundation)
+# AgentDesk
 
 An enterprise customer support agent platform with multi-turn conversations,
 agent orchestration, tool calling, and RAG, built incrementally from a runnable
 foundation.
 
-企业级智能客服 Agent 项目：围绕多轮对话、Agent 编排、工具调用和 RAG 构建完整业务闭环。
+企业级智能客服 Agent 项目，围绕多轮对话、Agent 编排、工具调用和 RAG 构建完整业务闭环。
 
-> **Scope:** runnable **foundation**, not a finished production support product. The current demonstration covers conversation identity, persistent task state, deterministic dialogue decisions, replay-safe request IDs and tests. Real LLM routing, order/refund tools, RAG, auth, UI and observability are staged integration work, **not present yet**.
+**Current scope:** a deterministic dialogue/task demo with MySQL conversation
+state, request deduplication, an isolated Docker environment and dependency
+diagnostics. Real LLM routing, order/refund tools, RAG pipelines, authentication,
+long-term memory, workers and frontend are planned features.
 
-## Design choices
+## Quick start
 
-- FastAPI / Pydantic v2 / Python 3.12, SQLAlchemy 2.x async + Alembic
-- MySQL 8.4 **source of truth** (conversations, turns, task state); Redis for future caching / streams / ephemeral locks
-- Existing Milvus 2.6.x **reused** as an external service for future RAG (not modified by this Compose)
-- Pure Python Dialogue Manager and deterministic business FSM; pluggable LLM interpreter for ambiguous cases later
-- API is a modular monolith. Avoid unnecessary separate Agent services and duplicated state stores.
-
-## Local startup
+Install Git and Docker with Linux containers (Windows: Docker Desktop with WSL 2).
+Python, MySQL, Redis and Milvus run inside containers. Run these commands in
+PowerShell or a Linux/macOS shell:
 
 ```bash
 git clone https://github.com/Acxxxq/agentdesk.git
 cd agentdesk
-# from repository root: isolated local ports 18000 / 53306 / 56379
-docker compose -f infra/compose.yaml up -d --build
-curl http://127.0.0.1:18000/health
+docker run --rm --mount "type=bind,source=${PWD},target=/workspace" -w /workspace python:3.12-slim python scripts/generate_env.py
+docker compose config --quiet
+docker compose up -d --build --wait
 ```
 
-For Windows PowerShell use `curl.exe` instead of `curl` if the alias behaves differently.
+The generator creates an ignored `.env` with independent random passwords and
+refuses to replace existing credentials. If `.env` already exists, skip that
+command. See [Docker guide](docs/DOCKER.md) for startup and troubleshooting.
 
-Create a conversation (DEMO AUTH only, **never expose publicly**):
+Open [API documentation](http://127.0.0.1:18000/docs) or check:
 
 ```bash
-curl -s http://127.0.0.1:18000/api/v1/conversations \
-  -H 'X-Demo-User: user_001' -H 'Content-Type: application/json' -d '{}'
-# Copy the returned id to CONV_ID
+curl http://127.0.0.1:18000/health/ready
+curl http://127.0.0.1:18000/health/dependencies
 ```
 
-Post a turn (replace `<CONV_ID>` and pass a distinct `request_id` per user turn):
+In Windows PowerShell, use `curl.exe` if `curl` resolves to a PowerShell alias.
+
+## Development and testing
+
+Use source mounts and automatic reload for backend development:
 
 ```bash
-curl -s http://127.0.0.1:18000/api/v1/conversations/<CONV_ID>/turns \
-  -H 'X-Demo-User: user_001' -H 'Content-Type: application/json' \
-  -d '{"request_id":"req-001","message":"我要退款"}'
+docker compose -f compose.yaml -f compose.dev.yaml up -d --build --wait
+docker compose logs -f api
 ```
 
-Follow with `{"request_id":"req-002","message":"A1001"}`. Repeating the same request ID returns the stored response rather than processing twice. This does **not** make external side-effecting tools idempotent; that needs a durable tool execution ledger / provider idempotency key.
-
-Try stopping & restarting the API container: MySQL retains the dialogue state. No refund is ever submitted by this demo.
-
-## Dev
+Run the test image without starting the infrastructure:
 
 ```bash
-cd backend
-python -m venv .venv
-# Linux/macOS: source .venv/bin/activate
-# Windows PowerShell: .\.venv\Scripts\Activate.ps1
-python -m pip install -e ".[dev]"
-python -m pytest -q
-python -m ruff check .
+docker compose --profile test build tests
+docker compose --profile test run --rm --no-deps tests
 ```
 
-Copy `backend/.env.example` to `backend/.env` and set `DATABASE_URL` pointing at
-a MySQL 8.4 instance before running the API outside Docker. From `backend/`,
-apply migrations with `python -m alembic upgrade head`.
+GitHub Actions uses the same container commands. Tests cover deterministic
+dialogue transitions and readiness behavior; live infrastructure validation
+is separate from these offline checks.
 
-## Important safety + durability boundaries
+## Conversation demo
 
-- `X-Demo-User` is accepted **only** when `APP_ENV=development`. Production explicitly rejects it until a real JWT/OIDC authentication adapter and tenant authorization are implemented.
-- Persisted relational records are the source of truth. Do not use Redis TTL as the sole copy of active tasks.
-- `SELECT FOR UPDATE` is used for this **short, deterministic demo transaction**. Do not hold a DB transaction open across remote LLM/tool calls in later phases; use leases + optimistic version checks / orchestration run IDs.
-- The demo does not run business-effect tools. Refund eligibility and confirmation must be verified through trusted services, and any submit operation needs approval, idempotency, audit, and recovery logic.
-- This Compose uses a separate project network and local-only, nonstandard host ports; it does not start, stop, or modify an existing Milvus / Redis / EchoMind deployment.
+Create a conversation using the local development identity header, then send
+`我要退款` and `A1001` with distinct request IDs. The API documentation includes
+the request schemas and interactive examples.
 
-More detail: `docs/ARCHITECTURE.md`, `docs/ADR-001-stack.md`, `docs/ROADMAP.md`.
+```bash
+curl http://127.0.0.1:18000/api/v1/conversations -H 'X-Demo-User: user_001' -H 'Content-Type: application/json' -d '{}'
+```
 
-## Development history and contributions
+Repeating a request ID with the same message avoids processing it twice. This
+does not make external business tools idempotent. No refund is submitted by
+the current demo.
 
-- [Development log](docs/DEVLOG.md): milestones, decisions and lessons.
-- [Roadmap](docs/ROADMAP.md): delivery stages and planned features.
-- [Contributing](CONTRIBUTING.md): local development and pull request workflow.
+## Architecture and deployment
+
+- Python 3.12 / FastAPI / Pydantic v2 / SQLAlchemy async / Alembic.
+- MySQL 8.4 holds authoritative business state; Redis provides cache/queue infrastructure.
+- Milvus 2.6.24 with etcd and dedicated MinIO; a separate MinIO stores documents.
+- A modular monolith with deterministic task transitions and future model/tool adapters.
+- One-shot services apply migrations and initialize the private document bucket.
+- Optional Attu administration UI: `docker compose --profile admin up -d attu`.
+
+Services use an isolated `agentdesk` network and named volumes. Host ports bind
+to loopback. Existing EchoMind and Milvus instances keep their own data and ports.
+The development API uses a demo identity header; replace it with real identity
+and tenant authorization before Internet deployment.
+
+## Project records
+
+- [Architecture](docs/ARCHITECTURE.md)
+- [Technology decisions](docs/ADR-001-stack.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Development log](docs/DEVLOG.md)
+- [Contributing](CONTRIBUTING.md)
 
 ## License
 
