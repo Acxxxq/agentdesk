@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
-from agentdesk.api.routes import router
-from agentdesk.infrastructure import health as dependency_health
+from agentorbis.api.routes import router
+from agentorbis.infrastructure import health as dependency_health
 
-app = FastAPI(title="AgentDesk (foundation)", version="0.1.0")
+app = FastAPI(title="AgentOrbis (foundation)", version="0.1.0")
 app.include_router(router)
 
 

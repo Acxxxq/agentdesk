@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
-from agentdesk.infrastructure import health
-from agentdesk.main import app
+from agentorbis.infrastructure import health
+from agentorbis.main import app
 
 
 async def ok():

@@ -4,7 +4,7 @@ from uuid import uuid4
 from sqlalchemy import JSON, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
-from agentdesk.infrastructure.db import Base
+from agentorbis.infrastructure.db import Base
 
 
 def uid() -> str:

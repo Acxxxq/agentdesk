@@ -9,3 +9,5 @@ Describe the checks performed and any remaining limitations.
 ## Related issue
 
 Link an issue if applicable.
+
+See the [Chinese contribution guide](../CONTRIBUTING.zh-CN.md) for the Chinese-language version.

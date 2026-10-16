@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
-from agentdesk.core.settings import get_settings
+from agentorbis.core.settings import get_settings
 
 
 class Base(DeclarativeBase):

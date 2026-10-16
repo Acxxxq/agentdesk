@@ -146,7 +146,7 @@ services:
   bucket-init:
     build: *api-build
     environment: *api-environment
-    command: ["python", "-m", "agentdesk.infrastructure.initialize_storage"]
+    command: ["python", "-m", "agentorbis.infrastructure.initialize_storage"]
     depends_on:
       document-minio:
         condition: service_healthy

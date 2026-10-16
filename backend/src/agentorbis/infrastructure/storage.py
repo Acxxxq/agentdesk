@@ -1,4 +1,4 @@
-from agentdesk.core.settings import get_settings
+from agentorbis.core.settings import get_settings
 
 
 def storage_client():

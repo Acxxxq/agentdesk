@@ -6,11 +6,11 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from agentdesk.core.settings import get_settings
-from agentdesk.domain.dialogue import DialogueManager
-from agentdesk.domain.state import ConversationState
-from agentdesk.infrastructure.db import get_session
-from agentdesk.infrastructure.models import Conversation, Message, Turn
+from agentorbis.core.settings import get_settings
+from agentorbis.domain.dialogue import DialogueManager
+from agentorbis.domain.state import ConversationState
+from agentorbis.infrastructure.db import get_session
+from agentorbis.infrastructure.models import Conversation, Message, Turn
 
 router = APIRouter(prefix="/api/v1")
 SessionDep = Annotated[AsyncSession, Depends(get_session)]

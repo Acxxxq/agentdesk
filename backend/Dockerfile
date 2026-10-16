@@ -19,7 +19,7 @@ COPY alembic /app/alembic
 COPY alembic.ini /app/alembic.ini
 RUN pip install --no-deps --no-build-isolation .
 EXPOSE 8000
-CMD ["python", "-m", "uvicorn", "agentdesk.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "uvicorn", "agentorbis.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 FROM development-dependencies AS development
 COPY README.md /app/README.md
@@ -29,4 +29,4 @@ COPY alembic.ini /app/alembic.ini
 COPY tests /app/tests
 RUN pip install --no-deps --no-build-isolation -e .
 EXPOSE 8000
-CMD ["python", "-m", "uvicorn", "agentdesk.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["python", "-m", "uvicorn", "agentorbis.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

@@ -1,7 +1,7 @@
 """Create the application's private document bucket once at stack startup."""
 
-from agentdesk.core.settings import get_settings
-from agentdesk.infrastructure.storage import storage_client
+from agentorbis.core.settings import get_settings
+from agentorbis.infrastructure.storage import storage_client
 
 
 def main() -> None:

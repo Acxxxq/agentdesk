@@ -1,4 +1,4 @@
-# For a NEW AgentDesk instance. Do not apply to an existing Milvus data directory.
+# For a NEW AgentOrbis instance. Do not apply to an existing Milvus data directory.
 mq:
   type: woodpecker
 woodpecker:

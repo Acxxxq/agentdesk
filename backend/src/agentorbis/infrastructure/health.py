@@ -6,8 +6,8 @@ from uuid import uuid4
 
 from sqlalchemy import text
 
-from agentdesk.core.settings import get_settings
-from agentdesk.infrastructure.db import engine
+from agentorbis.core.settings import get_settings
+from agentorbis.infrastructure.db import engine
 
 
 async def probe_mysql() -> None:
@@ -44,7 +44,7 @@ async def probe_milvus() -> None:
 
 
 def _objectstore_check() -> None:
-    from agentdesk.infrastructure.storage import storage_client
+    from agentorbis.infrastructure.storage import storage_client
 
     client, transport = storage_client()
     try:

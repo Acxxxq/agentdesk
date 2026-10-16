@@ -1,12 +1,12 @@
-# AgentDesk development log
+# AgentOrbis development log
 
 This log records milestones and engineering decisions. Git commits provide
 the detailed change history; issues track planned work.
 
-## 2026-10-14 — Initial AgentDesk foundation
+## 2026-10-14 — Initial AgentOrbis foundation
 
-- Selected the AgentDesk name and MIT License.
-- Renamed the Python package and application configuration to `agentdesk`.
+- Selected the AgentDesk name (renamed to AgentOrbis on 2026-10-16) and MIT License.
+- Renamed the Python package and application configuration to `agentorbis`.
 - Selected MySQL 8.4 with SQLAlchemy async, asyncmy and Alembic for business state.
 - Added the conversation API, JSON conversation state, request deduplication
   and a deterministic dialogue/task demo to the initial repository snapshot.
@@ -24,7 +24,7 @@ and next step. Link the corresponding issue or pull request when available.
 
 ## 2026-10-14 — Unified Docker development environment
 
-- Integrated the supplied infrastructure starter into the existing AgentDesk API.
+- Integrated the supplied infrastructure starter into the existing AgentOrbis API.
 - Moved Compose to the repository root; added source reload and container tests.
 - Added independent Milvus/etcd/internal MinIO and document MinIO instances.
 - Explicitly selected embedded Woodpecker with a compatible MinIO image.
@@ -45,3 +45,9 @@ and next step. Link the corresponding issue or pull request when available.
 - Added the missing editable-install build dependency and documented Attu's
   local administrator setup at `/login`.
 - The test client emits one upstream HTTPX deprecation warning; tests pass.
+
+## 2026-10-16 — Rename to AgentOrbis
+
+- Renamed the project brand and Python package to AgentOrbis / `agentorbis`.
+- Updated imports, container entry points, and bilingual documentation.
+- Preserved existing Compose/storage identifiers and Git remote for compatibility.

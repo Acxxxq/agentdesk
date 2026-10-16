@@ -11,7 +11,7 @@ flowchart TD
     ORCH --> LLM[Model Gateway]
     ORCH --> TOOLS[Tool Registry + execution ledger]
     ORCH --> RAG[RAG Gateway]
-    RAG --> MILVUS[(AgentDesk Milvus instance)]
+    RAG --> MILVUS[(AgentOrbis Milvus instance)]
     RAG --> OBJ[(Document MinIO)]
     ORCH --> STORE
     API --> REDIS[(Redis: cache / stream future)]

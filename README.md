@@ -1,4 +1,10 @@
-# AgentDesk
+# AgentOrbis
+
+**Enterprise AI Agent Platform**
+
+Build reliable agents for real-world business workflows.
+
+**Languages:** English | [简体中文](README.zh-CN.md)
 
 An enterprise customer support agent platform with multi-turn conversations,
 agent orchestration, tool calling, and RAG, built incrementally from a runnable
@@ -18,8 +24,8 @@ Python, MySQL, Redis and Milvus run inside containers. Run these commands in
 PowerShell or a Linux/macOS shell:
 
 ```bash
-git clone https://github.com/Acxxxq/agentdesk.git
-cd agentdesk
+git clone https://github.com/Acxxxq/agentdesk.git agentorbis
+cd agentorbis
 docker run --rm --mount "type=bind,source=${PWD},target=/workspace" -w /workspace python:3.12-slim python scripts/generate_env.py
 docker compose config --quiet
 docker compose up -d --build --wait
@@ -92,7 +98,9 @@ and tenant authorization before Internet deployment.
 - [Technology decisions](docs/ADR-001-stack.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Development log](docs/DEVLOG.md)
+- [Code style](docs/CODE_STYLE.md)
 - [Contributing](CONTRIBUTING.md)
+- [中文文档索引](docs/zh/README.md)
 
 ## License
 

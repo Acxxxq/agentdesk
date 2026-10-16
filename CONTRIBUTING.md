@@ -1,7 +1,11 @@
-# Contributing to AgentDesk
+# Contributing to AgentOrbis
+
+**Languages:** English | [简体中文](CONTRIBUTING.zh-CN.md)
 
 Start with the README and [roadmap](docs/ROADMAP.md). Open an issue describing
 the problem and expected behavior before proposing a large architectural change.
+Follow the [code style](docs/CODE_STYLE.md), including Chinese comments and
+docstrings for new or modified code.
 
 ## Development environment
 

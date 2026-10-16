@@ -8,13 +8,13 @@ import pytest
 
 
 @pytest.mark.skipif(
-    not os.environ.get("AGENTDESK_INTEGRATION_URL"),
-    reason="Set AGENTDESK_INTEGRATION_URL to run against a development stack",
+    not os.environ.get("AGENTORBIS_INTEGRATION_URL"),
+    reason="Set AGENTORBIS_INTEGRATION_URL to run against a development stack",
 )
 def test_mysql_conversation_turns_replay_and_ownership():
     actor = f"integration-{uuid4()}"
     with httpx.Client(
-        base_url=os.environ["AGENTDESK_INTEGRATION_URL"],
+        base_url=os.environ["AGENTORBIS_INTEGRATION_URL"],
         headers={"X-Demo-User": actor}, timeout=10,
     ) as client:
         created = client.post("/api/v1/conversations", json={})

@@ -1,5 +1,5 @@
-from agentdesk.domain.dialogue import DialogueManager
-from agentdesk.domain.state import Action, ConversationState, TaskStatus
+from agentorbis.domain.dialogue import DialogueManager
+from agentorbis.domain.state import Action, ConversationState, TaskStatus
 
 
 def turn(state, message):

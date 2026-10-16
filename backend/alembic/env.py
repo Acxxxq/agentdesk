@@ -6,9 +6,9 @@ from logging.config import fileConfig
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from agentdesk.core.settings import get_settings
-from agentdesk.infrastructure import models  # noqa: F401
-from agentdesk.infrastructure.db import Base
+from agentorbis.core.settings import get_settings
+from agentorbis.infrastructure import models  # noqa: F401
+from agentorbis.infrastructure.db import Base
 from alembic import context
 
 config = context.config

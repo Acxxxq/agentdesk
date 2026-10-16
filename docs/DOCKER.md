@@ -1,4 +1,4 @@
-# AgentDesk Docker environment
+# AgentOrbis Docker environment
 
 ## Services and ports
 
@@ -56,7 +56,7 @@ test changes. The default runtime image uses a packaged install with no mounts.
 With a running development stack, enable the real MySQL/API regression:
 
 ```bash
-docker compose --profile test run --rm --no-deps -e AGENTDESK_INTEGRATION_URL=http://api:8000 tests
+docker compose --profile test run --rm --no-deps -e AGENTORBIS_INTEGRATION_URL=http://api:8000 tests
 ```
 
 This creates isolated demo conversations and checks turn writes, replay,
@@ -117,3 +117,7 @@ Review Docker Desktop memory allocation when running two Milvus instances.
 The starter's `infra/compose.yaml` has moved to root `compose.yaml`.
 This stack is for local development; the API still requires real authentication
 and tenant authorization before Internet deployment.
+
+## Rename compatibility
+
+The project is now AgentOrbis. The Compose project name (`agentdesk`), existing storage buckets and local credentials retain their previous identifiers to preserve data access. The Python package is `agentorbis`; integration tests use `AGENTORBIS_INTEGRATION_URL`. The Git remote and workspace directory retain their existing paths until migrated separately.
