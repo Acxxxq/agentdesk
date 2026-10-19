@@ -1,30 +1,26 @@
-"""Generate local Compose credentials without replacing an existing .env."""
+"""从模板创建本地开发环境文件；真实 API 密钥由开发者自行填写。"""
 
-import os
-import secrets
 from pathlib import Path
 
 
-def private_opener(path: str, flags: int) -> int:
-    return os.open(path, flags, 0o600)
-
-
 def generate(root: Path) -> None:
-    template = (root / ".env.example").read_text(encoding="utf-8")
-    content = "\n".join(
-        line.replace("=CHANGE_ME", "=" + secrets.token_hex(24))
-        if line.endswith("=CHANGE_ME") else line
-        for line in template.splitlines()
-    ) + "\n"
+    """复制 `.env.example` 为 `.env`，已有配置时拒绝覆盖。
+
+    参数：
+        root：项目根目录，必须包含 `.env.example`。
+
+    返回：
+        None：创建文件并提示后续配置步骤；目标已存在时抛出 FileExistsError。
+    """
+    source = root / ".env.example"
     target = root / ".env"
-    # Exclusive creation preserves credentials already associated with data volumes.
-    with open(target, "x", encoding="utf-8", opener=private_opener) as stream:
-        stream.write(content)
-    print("Generated .env with independent random passwords; keep it private.")
+    with target.open("x", encoding="utf-8", newline="\n") as stream:
+        stream.write(source.read_text(encoding="utf-8"))
+    print("已创建 .env。请填写 ANTHROPIC_API_KEY；该文件已被 Git 忽略。")
 
 
 if __name__ == "__main__":
     try:
         generate(Path(__file__).resolve().parents[1])
     except FileExistsError:
-        raise SystemExit(".env already exists; refusing to overwrite credentials") from None
+        raise SystemExit(".env 已存在，为保护本地密钥拒绝覆盖。") from None

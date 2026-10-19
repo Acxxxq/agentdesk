@@ -1,4 +1,5 @@
 .venv/
+.venv-intent/
 __pycache__/
 *.pyc
 .env

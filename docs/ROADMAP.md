@@ -1,35 +1,37 @@
-# Delivery plan
+# Roadmap
 
-## P0 — runnable business vertical slice (included here)
-- Compose (MySQL 8.4, Redis, API) isolated from existing deployments
-- Health endpoint, create/read conversation, send turn endpoint
-- Auth **demo-only**; tenant scope; DB migrations
-- Task state FSM demo for refund/logistics, correction/cancellation/task switching
-- Idempotent request IDs and pure unit tests
+**Languages:** English | [简体中文](zh/ROADMAP.md)
 
-## P1 — real conversation engine
-- JWT/OIDC auth, RBAC and tenant-scoped queries
-- Structured LLM dialogue understanding with Pydantic; deterministic fallback
-- Explicit pending inputs, clarifications, task resume and cancel policies
-- Per-conversation run lease + short DB transactions, event log and recovery
-- Agent Runtime bounded tool loop; tool registry/ACL, timeout/retry policy
-- End-to-end scenarios and integration tests against a test MySQL instance
+## Stage 1 — Intent recognition (current)
 
-## P2 — RAG + customer experience
-- Integrate the isolated Compose Milvus, collection versioning and tenant filters
-- File pipeline + MinIO; hybrid search, rerank, evidence citations
-- Frontend customer chat + operator traces + tool approval UI
-- SSE streaming, reconnect using persisted event IDs (no false replay promises)
-- OpenTelemetry/Langfuse integration, PII redaction and retention policies
+- Define strict message, action, entity, relation, and ambiguity contracts.
+- Interpret topic switches, follow-up answers, corrections, multiple acts, and underspecified requests.
+- Validate model output and evidence before returning it to the caller.
+- Keep datasets frozen and record raw requests, responses, source snapshots, and metrics.
+- Collect manually reviewed and real-world anonymized examples before making accuracy claims.
 
-## P3 — production hardening and benchmark
-- Async document indexing / eval workers, outbox and DLQ; Celery optional
-- Idempotent external order and refund providers + reconciliation/saga paths
-- Load/chaos tests, migrations, backups, alerts, deployment and CI quality gates
-- Public reproducible evals, golden multi-turn datasets, latency/cost dashboard
+## Stage 2 — Dialogue policy and state reducer
 
-## Definition of done before public Internet exposure
-- Replace demo auth; real user identity and tenant row-level checks
-- Secret management, token redaction, CORS/rate limits, file scanning, input bounds
-- Tool audit log, tool action approvals, idempotency and uncertain-result recovery
-- Data retention/deletion, MySQL backups, security tests, observability
+- Decide whether an interpreted act starts, answers, resumes, corrects, or cancels a task.
+- Ask a targeted clarification when intent, task target, or required parameters remain ambiguous.
+- Preserve the original pending request when unrelated topics interrupt it.
+- Implement a pure reducer that returns the next state and domain events without I/O.
+- Evaluate safety rules for task switching, negation, alternatives, and multi-act messages.
+
+## Stage 3 — Persistence and API workflow
+
+- Add MySQL-backed conversations, tasks, messages, and event history after state behavior is defined.
+- Keep model calls outside database transactions; use version checks and idempotency at write boundaries.
+- Add authentication, tenant authorization, retention, and audit rules before deployment.
+
+## Stage 4 — Tools and agent runtime
+
+- Add typed, permission-scoped business tools with timeout and idempotency policies.
+- Require confirmation for consequential actions and record execution outcomes.
+- Add recovery for uncertain external outcomes and background work when a real use case requires it.
+
+## Stage 5 — RAG, memory, and production evaluation
+
+- Add document ingestion and retrieval only after the support workflow needs it.
+- Separate authoritative task state from searchable memory and vector indexes.
+- Expand evaluation with held-out, human-reviewed examples, regression gates, latency, and cost.

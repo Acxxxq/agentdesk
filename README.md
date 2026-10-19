@@ -6,101 +6,57 @@ Build reliable agents for real-world business workflows.
 
 **Languages:** English | [简体中文](README.zh-CN.md)
 
-An enterprise customer support agent platform with multi-turn conversations,
-agent orchestration, tool calling, and RAG, built incrementally from a runnable
-foundation.
+AgentOrbis starts with a focused, testable intent recognition module. It reads the current message with optional read-only conversation context, identifies one or more business acts, extracts evidence-backed entities, and reports ambiguity. It does not execute tasks or change business state.
 
-企业级智能客服 Agent 项目，围绕多轮对话、Agent 编排、工具调用和 RAG 构建完整业务闭环。
+## First module: intent recognition
 
-**Current scope:** a deterministic dialogue/task demo with MySQL conversation
-state, request deduplication, an isolated Docker environment and dependency
-diagnostics. Real LLM routing, order/refund tools, RAG pipelines, authentication,
-long-term memory, workers and frontend are planned features.
+- FastAPI endpoint: `POST /api/v1/interpret`
+- Anthropic Python SDK with an Anthropic-compatible endpoint such as DeepSeek
+- Strict Pydantic output contracts and evidence checks
+- Topic and intent switching, multiple acts, task references, and ambiguity handling
+- Local Chinese chat page at `/demo`
+- Fixed synthetic datasets and reproducible evaluation records in [`evaluation/`](evaluation/README.md)
 
-## Quick start
+The current evaluation is a development set written by the project author. Its scores guide iteration; they are not production accuracy claims or a blind benchmark.
 
-Install Git and Docker with Linux containers (Windows: Docker Desktop with WSL 2).
-Python, MySQL, Redis and Milvus run inside containers. Run these commands in
-PowerShell or a Linux/macOS shell:
+## Run with Docker
+
+Install Git and Docker Desktop or Docker Engine, then run:
 
 ```bash
 git clone https://github.com/Acxxxq/agentdesk.git agentorbis
 cd agentorbis
 docker run --rm --mount "type=bind,source=${PWD},target=/workspace" -w /workspace python:3.12-slim python scripts/generate_env.py
-docker compose config --quiet
-docker compose up -d --build --wait
 ```
 
-The generator creates an ignored `.env` with independent random passwords and
-refuses to replace existing credentials. If `.env` already exists, skip that
-command. See [Docker guide](docs/DOCKER.md) for startup and troubleshooting.
-
-Open [API documentation](http://127.0.0.1:18000/docs) or check:
+Add your provider key to the ignored `.env` file, then start the API:
 
 ```bash
-curl http://127.0.0.1:18000/health/ready
-curl http://127.0.0.1:18000/health/dependencies
+docker compose up -d --build --wait api
 ```
 
-In Windows PowerShell, use `curl.exe` if `curl` resolves to a PowerShell alias.
+Open [the chat demo](http://127.0.0.1:18000/demo) or [the API docs](http://127.0.0.1:18000/docs). The default port is `18000`; set `API_PORT` in `.env` to change it.
 
-## Development and testing
-
-Use source mounts and automatic reload for backend development:
+For offline tests and lint in a container:
 
 ```bash
-docker compose -f compose.yaml -f compose.dev.yaml up -d --build --wait
-docker compose logs -f api
+docker compose --profile test run --build --rm tests
 ```
 
-Run the test image without starting the infrastructure:
+See the [Docker guide](docs/DOCKER.md) and [intent demo guide](docs/INTENT_DEMO.md) for details.
 
-```bash
-docker compose --profile test build tests
-docker compose --profile test run --rm --no-deps tests
-```
+## Project direction
 
-GitHub Actions uses the same container commands. Tests cover deterministic
-dialogue transitions and readiness behavior; live infrastructure validation
-is separate from these offline checks.
+The intent interpreter is the first real project module. The roadmap builds the next layer as a deterministic dialogue policy and state reducer, then persistence and tool execution. The broader target architecture is documented in [the platform plan](docs/PLATFORM_PLAN.md).
 
-## Conversation demo
-
-Create a conversation using the local development identity header, then send
-`我要退款` and `A1001` with distinct request IDs. The API documentation includes
-the request schemas and interactive examples.
-
-```bash
-curl http://127.0.0.1:18000/api/v1/conversations -H 'X-Demo-User: user_001' -H 'Content-Type: application/json' -d '{}'
-```
-
-Repeating a request ID with the same message avoids processing it twice. This
-does not make external business tools idempotent. No refund is submitted by
-the current demo.
-
-## Architecture and deployment
-
-- Python 3.12 / FastAPI / Pydantic v2 / SQLAlchemy async / Alembic.
-- MySQL 8.4 holds authoritative business state; Redis provides cache/queue infrastructure.
-- Milvus 2.6.24 with etcd and dedicated MinIO; a separate MinIO stores documents.
-- A modular monolith with deterministic task transitions and future model/tool adapters.
-- One-shot services apply migrations and initialize the private document bucket.
-- Optional Attu administration UI: `docker compose --profile admin up -d attu`.
-
-Services use an isolated `agentdesk` network and named volumes. Host ports bind
-to loopback. Existing EchoMind and Milvus instances keep their own data and ports.
-The development API uses a demo identity header; replace it with real identity
-and tenant authorization before Internet deployment.
-
-## Project records
+## Documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
-- [Technology decisions](docs/ADR-001-stack.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Development log](docs/DEVLOG.md)
-- [Code style](docs/CODE_STYLE.md)
+- [Code style and Chinese comments](docs/CODE_STYLE.md)
+- [Evaluation datasets and results](evaluation/README.md)
 - [Contributing](CONTRIBUTING.md)
-- [中文文档索引](docs/zh/README.md)
 
 ## License
 

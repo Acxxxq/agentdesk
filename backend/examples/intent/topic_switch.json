@@ -1,0 +1,14 @@
+{
+  "message": "帮我查一下 A1001 的物流",
+  "recent_messages": [
+    {"role": "user", "content": "我要退款"},
+    {"role": "assistant", "content": "请提供退款订单号"}
+  ],
+  "conversation": {
+    "active_task_id": "refund_001",
+    "pending_question": {"task_id": "refund_001", "slot_name": "order_id", "question": "请提供退款订单号"}
+  },
+  "task_summaries": [
+    {"task_id": "refund_001", "type": "refund", "status": "collecting", "slots": {"order_id": null}}
+  ]
+}

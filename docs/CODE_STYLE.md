@@ -35,5 +35,5 @@ These guidelines keep the project readable and maintainable. They also make the 
 ## Tests and validation
 
 - Add meaningful tests for new behavior and bug fixes, including relevant edge cases. Test names should describe the scenario and expected result.
-- Keep domain logic testable offline where possible. Clearly distinguish fast offline checks from validation that requires live MySQL, Redis, or APIs.
+- Keep interpretation and scoring logic testable offline where possible. Clearly distinguish mocked-provider checks from live model evaluation.
 - State the checks performed and any uncovered scenarios in the pull request.
