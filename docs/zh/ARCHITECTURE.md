@@ -12,6 +12,10 @@ flowchart LR
     LLM --> CONTRACT[严格的 Pydantic 契约]
     CONTRACT --> EVIDENCE[任务引用与原文证据校验]
     EVIDENCE --> RESULT[动作、关系与歧义]
+    RESULT --> CHAT[聊天 API 编排]
+    CHAT --> POLICY[确定性对话策略]
+    POLICY --> REDUCER[纯状态归约器]
+    REDUCER --> SESSION[进程内会话状态]
     DATA[固定评测数据集] --> EVAL[HTTP 评测器]
     API --> EVAL
     EVAL --> RECORD[带版本的结果和源码快照]
@@ -19,6 +23,6 @@ flowchart LR
 
 解释器不持有会话、不创建任务、不代替客服回复，也不执行工具。API 限制请求范围；模型提出语义动作；服务端再拒绝格式错误、引用未知任务或缺乏当前消息原文依据的实体。
 
-`MessageUnderstanding` 表示解释结果，不代表授权或执行决策。下一阶段计划增加确定性的对话策略、明确的澄清决策和纯状态归约器，再沿此边界接入持久化与外部工具。
+`MessageUnderstanding` 表示解释结果，不代表授权或执行决策。聊天 API 会将其交给确定性 `DialoguePolicy` 和纯 `StateReducer`，再把新状态与领域事件写入开发环境的进程内会话。当前尚未接入 MySQL 持久化或外部工具。
 
 首个模块所需环境均通过 Docker 运行：一个 API 容器，以及按需启动的测试容器。模型密钥保存在本地 `.env`。评测数据集和不可变的运行记录统一放在仓库根目录的 [`evaluation/`](../../evaluation/README.md)。

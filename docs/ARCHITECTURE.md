@@ -12,6 +12,10 @@ flowchart LR
     LLM --> CONTRACT[Strict Pydantic contract]
     CONTRACT --> EVIDENCE[Task reference and source evidence checks]
     EVIDENCE --> RESULT[Acts, relations, and ambiguities]
+    RESULT --> CHAT[Chat API orchestration]
+    CHAT --> POLICY[Deterministic dialogue policy]
+    POLICY --> REDUCER[Pure state reducer]
+    REDUCER --> SESSION[In-memory conversation session]
     DATA[Fixed evaluation dataset] --> EVAL[HTTP evaluator]
     API --> EVAL
     EVAL --> RECORD[Versioned results and source snapshots]
@@ -19,6 +23,6 @@ flowchart LR
 
 The interpreter does not own conversations, create tasks, answer customers, or execute tools. The API validates request bounds; the model proposes semantic acts; server-side validation rejects malformed structures, unsupported task references, and entities without literal evidence in the current message.
 
-`MessageUnderstanding` is an interpretation result, not an authorization decision. The next planned module will add a deterministic dialogue policy, explicit clarification decisions, and a pure state reducer. Persistence and external tools follow that boundary.
+`MessageUnderstanding` is an interpretation result, not an authorization decision. The chat API passes it to a deterministic dialogue policy and pure state reducer, then stores the resulting state and domain events in a development-only in-memory session. MySQL persistence and external tools follow after the state behavior is evaluated.
 
 Everything currently needed for the first module runs in Docker: one API container, plus an optional test profile. The model key remains local in `.env`. Evaluation datasets and immutable run records live in the repository-level [`evaluation/`](../evaluation/README.md) folder.

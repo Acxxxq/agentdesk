@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AgentOrbis · 意图实验室</title>
+  <title>AgentOrbis · 对话工作台</title>
   <link rel="stylesheet" href="/demo/assets/chat.css">
   <script src="/demo/assets/chat.js" defer></script>
 </head>
@@ -13,50 +13,44 @@
       <svg class="orbit" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="6" stroke="currentColor" stroke-width="2.5"/><ellipse cx="20" cy="20" rx="18" ry="11" transform="rotate(-40 20 20)" stroke="currentColor" stroke-width="2"/><circle cx="33" cy="9" r="4" fill="currentColor"/></svg>
       AgentOrbis
     </a>
-    <div class="workspace-label">开发工作台 <span>LOCAL</span></div>
-    <div class="nav-item"><span>◈</span> 意图实验室 <small>01</small></div>
-    <div class="sidebar-copy">从一句话，理解用户真正想做的事。</div>
+    <div class="workspace-label">Agent 工作台 <span>LOCAL</span></div>
+    <div class="nav-item"><span>◈</span> 对话工作台 <small>01</small></div>
+    <div class="sidebar-copy">通过自然对话管理业务任务与上下文。</div>
 
     <section class="context-panel">
-      <div class="section-heading">模拟任务上下文 <span>只读</span></div>
-      <label for="scenario">选择测试场景</label>
-      <select id="scenario">
-        <option value="none">无已有任务</option>
-        <option value="refund">退款正在等待订单号</option>
-        <option value="ambiguous">存在两个退款任务</option>
-      </select>
+      <div class="section-heading">当前会话 <span>实时</span></div>
       <div id="context-preview" class="context-preview"></div>
-      <p class="context-hint">预设在每轮保持不变，不会自动创建任务或更新槽位。切换场景会清空聊天记录。</p>
+      <p class="context-hint">任务状态由对话策略更新。当前为开发环境内存会话，服务重启后会清空。</p>
     </section>
     <div class="sidebar-footer"><span class="status-dot"></span>AgentOrbis API · Anthropic SDK<a href="/docs" target="_blank" rel="noopener">API 文档 ↗</a></div>
   </aside>
 
   <main class="workspace">
     <header class="topbar">
-      <div><span class="breadcrumb">实验室 /</span> 对话测试</div>
-      <div class="top-actions"><span class="read-only">只读意图识别</span><button id="clear" class="quiet-button" type="button">新对话</button></div>
+      <div><span class="breadcrumb">AgentOrbis /</span> 对话工作台</div>
+      <div class="top-actions"><span class="read-only">业务任务 · 开发模式</span><button id="clear" class="quiet-button" type="button">新对话</button></div>
     </header>
     <div id="messages" class="messages" role="log" aria-label="对话消息" aria-live="polite">
       <section id="welcome" class="welcome">
-        <div class="eyebrow"><span></span> MESSAGE INTERPRETER</div>
-        <h1>换个话题，也能读懂你。</h1>
-        <p>像聊天一样测试意图识别。查看一句话中的业务意图、<br class="desktop-break">任务指向与候选实体，观察上下文如何影响理解。</p>
+        <div class="eyebrow"><span></span> AGENT WORKSPACE</div>
+        <h1>自然对话，驱动业务流程。</h1>
+        <p>试着发起任务、切换话题、补充信息或更正任务。<br class="desktop-break">AgentOrbis 会展示它的理解和状态变化。</p>
         <div class="suggestions">
-          <button class="suggestion" data-message="我要退款" type="button"><span>01 · 单意图</span><strong>我要退款</strong><i>↗</i></button>
-          <button class="suggestion" data-scenario="refund" data-message="帮我查一下 A1001 的物流" type="button"><span>02 · 话题切换</span><strong>先不填退款订单，查一下物流</strong><i>↗</i></button>
-          <button class="suggestion" data-message="先查 A1001 物流，再申请 A2002 退款" type="button"><span>03 · 多意图</span><strong>查物流，再申请另一单退款</strong><i>↗</i></button>
-          <button class="suggestion" data-message="退款一般多久到账？" type="button"><span>04 · 临时咨询</span><strong>退款一般多久到账？</strong><i>↗</i></button>
+          <button class="suggestion" data-message="我要申请退款" type="button"><span>01 · 发起任务</span><strong>我要申请退款</strong><i>↗</i></button>
+          <button class="suggestion" data-message="先查一下 A1001 的物流" type="button"><span>02 · 切换话题</span><strong>先查一下 A1001 的物流</strong><i>↗</i></button>
+          <button class="suggestion" data-message="查一下 A1001 物流，再申请 A2002 退款" type="button"><span>03 · 多个任务</span><strong>查物流，再申请另一单退款</strong><i>↗</i></button>
+          <button class="suggestion" data-message="退款一般多久到账？" type="button"><span>04 · 暂时咨询</span><strong>退款一般多久到账？</strong><i>↗</i></button>
         </div>
       </section>
     </div>
     <div class="composer-area">
-      <div id="request-status" class="request-status" role="status">当前：无任务上下文 · 携带最近 0 条消息</div>
+      <div id="request-status" class="request-status" role="status">新会话 · 状态仅保存在当前开发服务中</div>
       <form id="composer" class="composer">
         <label class="sr-only" for="message">输入测试消息</label>
-        <textarea id="message" rows="1" maxlength="4000" placeholder="输入一句话，试试切换话题或同时提出多个请求…" required></textarea>
+        <textarea id="message" rows="1" maxlength="4000" placeholder="告诉我你想办理什么，也可以随时切换话题…" required></textarea>
         <div class="composer-bottom"><span>Enter 发送 · Shift + Enter 换行</span><button id="send" type="submit" aria-label="发送消息">发送 <span>↑</span></button></div>
       </form>
-      <p class="footnote">回复是意图解析摘要，不是实际客服答复；不会执行退款、查询工具或保存业务状态。</p>
+      <p class="footnote">当前只管理会话内任务状态；未连接退款、物流或政策知识服务，不会执行真实业务操作。</p>
     </div>
   </main>
 </body>

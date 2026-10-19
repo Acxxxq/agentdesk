@@ -6,7 +6,7 @@ Build reliable agents for real-world business workflows.
 
 **Languages:** English | [简体中文](README.zh-CN.md)
 
-AgentOrbis starts with a focused, testable intent recognition module. It reads the current message with optional read-only conversation context, identifies one or more business acts, extracts evidence-backed entities, and reports ambiguity. It does not execute tasks or change business state.
+AgentOrbis starts with a focused, testable intent recognition module. It reads the current message with read-only conversation context, identifies business acts, extracts evidence-backed entities, and reports ambiguity. `/demo` now connects this interpreter to a deterministic dialogue policy and pure state reducer, so task state changes can be exercised in an in-memory conversation.
 
 ## First module: intent recognition
 
@@ -18,6 +18,13 @@ AgentOrbis starts with a focused, testable intent recognition module. It reads t
 - Fixed synthetic datasets and reproducible evaluation records in [`evaluation/`](evaluation/README.md)
 
 The current evaluation is a development set written by the project author. Its scores guide iteration; they are not production accuracy claims or a blind benchmark.
+
+## In development: dialogue policy and state reducer
+
+- Deterministically choose whether to create, fill, resume, correct, or cancel a task
+- Preserve clarification context when the intent, task target, or parameter is unclear
+- Compute new in-memory state and domain events without database or external tool calls
+- The chat page and API are connected; sessions currently live in process memory, with MySQL still to come
 
 ## Run with Docker
 
@@ -35,7 +42,7 @@ Add your provider key to the ignored `.env` file, then start the API:
 docker compose up -d --build --wait api
 ```
 
-Open [the chat demo](http://127.0.0.1:18000/demo) or [the API docs](http://127.0.0.1:18000/docs). The default port is `18000`; set `API_PORT` in `.env` to change it.
+Open the [Agent workspace](http://127.0.0.1:18000/demo) or [API docs](http://127.0.0.1:18000/docs). The workspace now connects interpretation, dialogue policy, and in-memory state reduction. The default port is `18000`; set `API_PORT` in `.env` to change it.
 
 For offline tests and lint in a container:
 
@@ -47,7 +54,7 @@ See the [Docker guide](docs/DOCKER.md) and [intent demo guide](docs/INTENT_DEMO.
 
 ## Project direction
 
-The intent interpreter is the first real project module. The roadmap builds the next layer as a deterministic dialogue policy and state reducer, then persistence and tool execution. The broader target architecture is documented in [the platform plan](docs/PLATFORM_PLAN.md).
+The intent interpreter is the first real project module. Work is now in the dialogue policy and state reducer stage; persistence and tool execution follow after state behavior is settled. The broader target architecture is documented in [the platform plan](docs/PLATFORM_PLAN.md).
 
 ## Documentation
 

@@ -2,12 +2,16 @@
 
 from fastapi import FastAPI
 
+from agentorbis.api.chat import ConversationSessionStore
+from agentorbis.api.chat import router as chat_router
 from agentorbis.api.demo import router as demo_router
 from agentorbis.intent_demo import lifespan
 from agentorbis.intent_demo import router as intent_router
 
-app = FastAPI(title="AgentOrbis Intent Recognition", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="AgentOrbis", version="0.2.0", lifespan=lifespan)
+app.state.conversation_store = ConversationSessionStore()
 app.include_router(intent_router)
+app.include_router(chat_router)
 app.include_router(demo_router)
 
 

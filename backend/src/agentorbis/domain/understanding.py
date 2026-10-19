@@ -39,6 +39,8 @@ class Ambiguity(Contract):
 
     kind: Literal["intent", "task", "parameter", "other"]
     candidate_values: list[str] = Field(default_factory=list, max_length=10)
+    target_slot: Literal["order_id", "reason"] | None = None
+    target_act_id: str | None = None
     reason: str = Field(default="", max_length=1000)
 
 
@@ -67,6 +69,11 @@ class UnderstandingPayload(Contract):
         ids = {act.act_id for act in self.acts}
         if len(ids) != len(self.acts):
             raise ValueError("Duplicate act IDs")
+        if any(
+            ambiguity.target_act_id is not None and ambiguity.target_act_id not in ids
+            for ambiguity in self.ambiguities
+        ):
+            raise ValueError("Unknown act in ambiguity")
         for relation in self.relations:
             if relation.source_act_id not in ids or relation.target_act_id not in ids:
                 raise ValueError("Unknown act in relation")
@@ -81,6 +88,24 @@ class MessageUnderstanding(UnderstandingPayload):
     """解析结果；source 由服务端添加，不接受模型声明结果来源。"""
 
     source: Literal["llm"] = "llm"
+
+
+class PendingClarificationContext(Contract):
+    """待处理的澄清上下文；保存原始语义，避免下一轮丢失已识别信息。"""
+
+    clarification_id: str = Field(min_length=1, max_length=120)
+    kind: Literal["intent", "task", "parameter", "other"]
+    question: str = Field(min_length=1, max_length=1000)
+    original_message: str = Field(min_length=1, max_length=4000)
+    candidate_values: list[str] = Field(default_factory=list, max_length=10)
+    candidate_task_ids: list[str] = Field(default_factory=list, max_length=20)
+    target_act_id: str | None = None
+    target_ambiguity_index: int | None = Field(default=None, ge=0, le=7)
+    target_slot: Literal["order_id", "reason"] | None = None
+    preserved_entities: dict[str, str] = Field(default_factory=dict, max_length=10)
+    original_acts: list[MessageAct] = Field(default_factory=list, max_length=8)
+    original_ambiguities: list[Ambiguity] = Field(default_factory=list, max_length=8)
+    original_relations: list[ActRelation] = Field(default_factory=list, max_length=16)
 
 
 class RecentMessage(Contract):
@@ -115,6 +140,9 @@ class ConversationContext(Contract):
     active_task_id: str | None = None
     current_focus: str | None = None
     pending_question: PendingQuestion | None = None
+    pending_questions: list[PendingQuestion] = Field(default_factory=list, max_length=20)
+    pending_clarification: PendingClarificationContext | None = None
+    suspended_clarifications: list[PendingClarificationContext] = Field(default_factory=list, max_length=20)
 
 
 class InterpretationRequest(Contract):
@@ -134,6 +162,11 @@ class InterpretationRequest(Contract):
         references = [self.conversation.active_task_id]
         if self.conversation.pending_question:
             references.append(self.conversation.pending_question.task_id)
+        references.extend(item.task_id for item in self.conversation.pending_questions)
+        if self.conversation.pending_clarification:
+            references.extend(self.conversation.pending_clarification.candidate_task_ids)
+        for item in self.conversation.suspended_clarifications:
+            references.extend(item.candidate_task_ids)
         if any(ref is not None and ref not in ids for ref in references):
             raise ValueError("Conversation references an unknown task")
         return self

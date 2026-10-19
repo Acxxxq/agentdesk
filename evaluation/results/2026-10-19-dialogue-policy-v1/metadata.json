@@ -1,0 +1,14 @@
+{
+  "run_id": "2026-10-19-dialogue-policy-v1",
+  "dataset": "dialogue_policy_v1.jsonl",
+  "evaluation_type": "deterministic; fixed semantic understanding inputs; no LLM calls",
+  "source_sha256": {
+    "backend/src/agentorbis/domain/understanding.py": "431ea1ebffa4974bbf67cc2ab9cd3b79039056dcc3df865e7ed2728d5e5d6267",
+    "backend/src/agentorbis/domain/state.py": "f536acf47f84f19a227c93f2f80565a1ed75ea990fd2d92d7e79d9619a994959",
+    "backend/src/agentorbis/domain/dialogue_policy.py": "11308f1b7cd2b47686fcaea0a1daa66a11e5b9d7734f8b50e4568625ff7f6f3b",
+    "backend/src/agentorbis/domain/state_reducer.py": "33b99d201c572742db4c82d84138544ea29442fedad976bd9b163c314422428c",
+    "backend/src/agentorbis/api/chat.py": "e2019052bdf2ecfc3ba275626231d2bb1db5712d83e21f5abd20fd8dcaf3f357",
+    "backend/src/agentorbis/infrastructure/llm/message_interpreter.py": "e9082952da7588e2ab4169d96d207a7a754c3bdaf13ec6d77e8c4c6248739f38",
+    "backend/src/agentorbis/evaluation/dialogue.py": "4e4d15a22670a62a1f81df07140d6b88602a942da0c263f95f1672c54d7ac2af"
+  }
+}

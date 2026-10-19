@@ -47,3 +47,16 @@ services:
       - -c
       - git config --global --add safe.directory /workspace && exec python -m agentorbis.evaluation.intent "$@"
       - --
+
+  chat-evaluator:
+    profiles: ["evaluation"]
+    build:
+      context: ./backend
+      target: development
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+    depends_on:
+      api:
+        condition: service_healthy
+    entrypoint: ["python", "-m", "agentorbis.evaluation.chat"]

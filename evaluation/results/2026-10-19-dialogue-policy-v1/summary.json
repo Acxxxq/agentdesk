@@ -1,0 +1,9 @@
+{
+  "dataset": "dialogue_policy_v1.jsonl",
+  "scenario_count": 7,
+  "passed_scenarios": 7,
+  "turn_count": 14,
+  "passed_turns": 14,
+  "turn_pass_rate": 1.0,
+  "evaluation_type": "deterministic dialogue policy and state reducer; fixed semantic inputs"
+}

@@ -2,7 +2,7 @@
 
 **Languages:** English | [简体中文](zh/INTENT_DEMO.md)
 
-This is the first implemented AgentOrbis module. It reads the current message and optional caller-supplied context, then returns structured business acts, candidate entities, relations, and ambiguities. It has no write access to task state and runs no business tools.
+Intent recognition is the first implemented AgentOrbis module. The `/demo` workspace now sends messages to `POST /api/v1/chat`, which combines interpretation with the deterministic dialogue policy and in-memory state reducer. Use `POST /api/v1/interpret` when you only need a structured understanding without changing task state. Neither endpoint runs external business tools.
 
 ## Run
 
@@ -13,7 +13,7 @@ docker run --rm --mount "type=bind,source=${PWD},target=/workspace" -w /workspac
 docker compose up -d --build --wait api
 ```
 
-Open [the chat page](http://127.0.0.1:18000/demo), or call `POST /api/v1/interpret` in [API docs](http://127.0.0.1:18000/docs):
+Open the [Agent workspace](http://127.0.0.1:18000/demo), or call either `POST /api/v1/chat` or `POST /api/v1/interpret` in the [API docs](http://127.0.0.1:18000/docs):
 
 ```json
 {"message": "先查 A1001 物流，再申请 A2002 退款"}
@@ -25,7 +25,7 @@ Example requests with context are in `backend/examples/intent/`. From inside the
 docker compose exec api python -m agentorbis.intent_demo --request examples/intent/topic_switch.json
 ```
 
-The local demo route is available only when `APP_ENV=development`. The caller supplies context; the interpreter does not load or authorize real tasks.
+The local chat route is available only when `APP_ENV=development`. Chat sessions are held in API process memory and cleared on service restart. The standalone interpreter accepts caller-supplied context; the chat workflow builds context from its own session state.
 
 ## Contract and limits
 

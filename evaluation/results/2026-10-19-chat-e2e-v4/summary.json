@@ -1,0 +1,560 @@
+{
+  "metadata": {
+    "started_at": "2026-10-19T17:45:19.297209+08:00",
+    "dataset": "evaluation\\datasets\\chat_e2e_v1.jsonl",
+    "dataset_sha256": "f537e865269ce7a6eee2ed05e00f0f6db43cb42844a388d6d02f1f1900c5c0d3",
+    "endpoint": "http://127.0.0.1:18001/api/v1/chat",
+    "model": "deepseek-v4-pro",
+    "concurrency": 3,
+    "prompt_sha256": "776c9571ee5325fe249338dc742b7499341d89e505010247be6a13d0c8aa708e",
+    "git_commit": "8a15d96327bcf3da4ef5b1f06457997c00c1379f",
+    "git_dirty": true,
+    "status": "running",
+    "source_hashes": {
+      "backend/src/agentorbis/api/chat.py": "e2019052bdf2ecfc3ba275626231d2bb1db5712d83e21f5abd20fd8dcaf3f357",
+      "backend/src/agentorbis/domain/understanding.py": "431ea1ebffa4974bbf67cc2ab9cd3b79039056dcc3df865e7ed2728d5e5d6267",
+      "backend/src/agentorbis/domain/dialogue_policy.py": "240e1b9e2be8875614b5bf3aae6d8f40f0463c9795019c4120a68e560b71f299",
+      "backend/src/agentorbis/domain/state_reducer.py": "33b99d201c572742db4c82d84138544ea29442fedad976bd9b163c314422428c",
+      "backend/src/agentorbis/infrastructure/llm/message_interpreter.py": "e9082952da7588e2ab4169d96d207a7a754c3bdaf13ec6d77e8c4c6248739f38",
+      "backend/src/agentorbis/evaluation/chat.py": "799fd39487908c723434c9ec181b49a49ba6a72d25cc6e6773486880c26ae0b8"
+    }
+  },
+  "overall": {
+    "scenarios": 10,
+    "scenarios_passed": 10,
+    "turns": 25,
+    "turns_passed": 25,
+    "turn_pass_rate": 1.0,
+    "http_errors": 0,
+    "latency_ms": {
+      "p50": 2166.25,
+      "p95": 3222.72
+    },
+    "checks": {
+      "act_1": {
+        "passed": 11,
+        "total": 11,
+        "rate": 1.0
+      },
+      "act_2": {
+        "passed": 2,
+        "total": 2,
+        "rate": 1.0
+      },
+      "ambiguities_required": {
+        "passed": 2,
+        "total": 2,
+        "rate": 1.0
+      },
+      "decision_actions": {
+        "passed": 24,
+        "total": 24,
+        "rate": 1.0
+      },
+      "event_types": {
+        "passed": 13,
+        "total": 13,
+        "rate": 1.0
+      },
+      "http_status": {
+        "passed": 25,
+        "total": 25,
+        "rate": 1.0
+      },
+      "intents": {
+        "passed": 22,
+        "total": 22,
+        "rate": 1.0
+      },
+      "internal_task_ids_hidden": {
+        "passed": 22,
+        "total": 22,
+        "rate": 1.0
+      },
+      "pending_clarification": {
+        "passed": 11,
+        "total": 11,
+        "rate": 1.0
+      },
+      "pending_clarification_candidate_task_types": {
+        "passed": 1,
+        "total": 1,
+        "rate": 1.0
+      },
+      "pending_question": {
+        "passed": 11,
+        "total": 11,
+        "rate": 1.0
+      },
+      "reply_contains": {
+        "passed": 12,
+        "total": 12,
+        "rate": 1.0
+      },
+      "task_statuses": {
+        "passed": 25,
+        "total": 25,
+        "rate": 1.0
+      }
+    }
+  },
+  "by_category": {
+    "ambiguity_safety": {
+      "scenarios": 1,
+      "scenarios_passed": 1,
+      "turns": 1,
+      "turns_passed": 1,
+      "turn_pass_rate": 1.0,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 2030.12,
+        "p95": 2030.12
+      },
+      "checks": {
+        "ambiguities_required": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "decision_actions": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "event_types": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "http_status": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "pending_clarification": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "reply_contains": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "task_statuses": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        }
+      }
+    },
+    "clarification": {
+      "scenarios": 1,
+      "scenarios_passed": 1,
+      "turns": 2,
+      "turns_passed": 2,
+      "turn_pass_rate": 1.0,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 2065.63,
+        "p95": 2167.32
+      },
+      "checks": {
+        "decision_actions": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "event_types": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "http_status": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "intents": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "internal_task_ids_hidden": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "pending_clarification": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "pending_question": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "task_statuses": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        }
+      }
+    },
+    "multi_action": {
+      "scenarios": 1,
+      "scenarios_passed": 1,
+      "turns": 2,
+      "turns_passed": 2,
+      "turn_pass_rate": 1.0,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 2706.05,
+        "p95": 3083.21
+      },
+      "checks": {
+        "act_1": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "act_2": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "decision_actions": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "event_types": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "http_status": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "intents": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "internal_task_ids_hidden": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "pending_clarification": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "reply_contains": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "task_statuses": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        }
+      }
+    },
+    "out_of_scope": {
+      "scenarios": 1,
+      "scenarios_passed": 1,
+      "turns": 1,
+      "turns_passed": 1,
+      "turn_pass_rate": 1.0,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 1852.5,
+        "p95": 1852.5
+      },
+      "checks": {
+        "ambiguities_required": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "decision_actions": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "http_status": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "pending_clarification": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "reply_contains": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "task_statuses": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        }
+      }
+    },
+    "slot_collection": {
+      "scenarios": 1,
+      "scenarios_passed": 1,
+      "turns": 3,
+      "turns_passed": 3,
+      "turn_pass_rate": 1.0,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 2388.46,
+        "p95": 3222.72
+      },
+      "checks": {
+        "act_1": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "decision_actions": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "event_types": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "http_status": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "intents": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "internal_task_ids_hidden": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "pending_question": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "reply_contains": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "task_statuses": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        }
+      }
+    },
+    "task_reference": {
+      "scenarios": 2,
+      "scenarios_passed": 2,
+      "turns": 8,
+      "turns_passed": 8,
+      "turn_pass_rate": 1.0,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 1827.97,
+        "p95": 6494.72
+      },
+      "checks": {
+        "act_1": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "decision_actions": {
+          "passed": 8,
+          "total": 8,
+          "rate": 1.0
+        },
+        "event_types": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "http_status": {
+          "passed": 8,
+          "total": 8,
+          "rate": 1.0
+        },
+        "intents": {
+          "passed": 7,
+          "total": 7,
+          "rate": 1.0
+        },
+        "internal_task_ids_hidden": {
+          "passed": 8,
+          "total": 8,
+          "rate": 1.0
+        },
+        "pending_clarification": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "pending_clarification_candidate_task_types": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "pending_question": {
+          "passed": 5,
+          "total": 5,
+          "rate": 1.0
+        },
+        "reply_contains": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "task_statuses": {
+          "passed": 8,
+          "total": 8,
+          "rate": 1.0
+        }
+      }
+    },
+    "task_targeting": {
+      "scenarios": 1,
+      "scenarios_passed": 1,
+      "turns": 3,
+      "turns_passed": 3,
+      "turn_pass_rate": 1.0,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 1992.44,
+        "p95": 2466.11
+      },
+      "checks": {
+        "act_1": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "decision_actions": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "event_types": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "http_status": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "intents": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "internal_task_ids_hidden": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "task_statuses": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        }
+      }
+    },
+    "topic_switch": {
+      "scenarios": 2,
+      "scenarios_passed": 2,
+      "turns": 5,
+      "turns_passed": 5,
+      "turn_pass_rate": 1.0,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 2166.25,
+        "p95": 2967.93
+      },
+      "checks": {
+        "act_1": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "act_2": {
+          "passed": 1,
+          "total": 1,
+          "rate": 1.0
+        },
+        "decision_actions": {
+          "passed": 5,
+          "total": 5,
+          "rate": 1.0
+        },
+        "event_types": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "http_status": {
+          "passed": 5,
+          "total": 5,
+          "rate": 1.0
+        },
+        "intents": {
+          "passed": 5,
+          "total": 5,
+          "rate": 1.0
+        },
+        "internal_task_ids_hidden": {
+          "passed": 5,
+          "total": 5,
+          "rate": 1.0
+        },
+        "pending_clarification": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "pending_question": {
+          "passed": 2,
+          "total": 2,
+          "rate": 1.0
+        },
+        "reply_contains": {
+          "passed": 3,
+          "total": 3,
+          "rate": 1.0
+        },
+        "task_statuses": {
+          "passed": 5,
+          "total": 5,
+          "rate": 1.0
+        }
+      }
+    }
+  }
+}

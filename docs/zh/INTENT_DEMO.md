@@ -2,7 +2,7 @@
 
 **语言：**[English](../INTENT_DEMO.md) | 简体中文
 
-这是 AgentOrbis 第一个正式实现的模块。它读取当前消息和调用方可选提供的上下文，返回结构化业务动作、候选实体、动作关系及歧义；它没有任务状态写权限，也不会执行任何业务工具。
+意图识别是 AgentOrbis 第一个正式实现的模块。`/demo` 工作台现调用 `POST /api/v1/chat`，将语义解析与确定性对话策略、内存状态归约器串联起来。只想查看结构化解析且不改变任务状态时，可调用 `POST /api/v1/interpret`。两个接口都不会执行外部业务工具。
 
 ## 启动
 
@@ -13,7 +13,7 @@ docker run --rm --mount "type=bind,source=${PWD},target=/workspace" -w /workspac
 docker compose up -d --build --wait api
 ```
 
-打开[聊天测试页](http://127.0.0.1:18000/demo)，或在[API 文档](http://127.0.0.1:18000/docs)中调用 `POST /api/v1/interpret`：
+打开 [Agent 工作台](http://127.0.0.1:18000/demo)，或在[API 文档](http://127.0.0.1:18000/docs)中调用 `POST /api/v1/chat` 或 `POST /api/v1/interpret`：
 
 ```json
 {"message": "先查 A1001 物流，再申请 A2002 退款"}
@@ -25,7 +25,7 @@ docker compose up -d --build --wait api
 docker compose exec api python -m agentorbis.intent_demo --request examples/intent/topic_switch.json
 ```
 
-本地测试路由仅在 `APP_ENV=development` 时开放。上下文由调用方提供，解释器不会读取或授权真实任务。
+本地聊天路由仅在 `APP_ENV=development` 时开放。会话暂存在 API 进程内存，服务重启后清空。独立解释接口的上下文由调用方提供；聊天流程则从自身会话状态构建上下文。
 
 ## 输入、输出与限制
 
