@@ -2,9 +2,11 @@
 
 from typing import Literal, Self
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-Intent = Literal["refund", "logistics", "policy_qa", "unknown"]
+from agentorbis.domain.intent_registry import resolve_intent
+
+Intent = Literal["refund.apply", "logistics.track", "policy.consult", "unknown"]
 
 
 class Contract(BaseModel):
@@ -32,6 +34,24 @@ class MessageAct(Contract):
     )
     utterance_span: str = Field(min_length=1, max_length=4000)
     uncertainty: Literal["low", "medium", "high"] = "medium"
+
+    @field_validator("business_intent", mode="before")
+    @classmethod
+    def normalize_legacy_intent(cls, value: object) -> object:
+        """兼容历史意图名称；对外输出始终使用正式 ID，未知值交由枚举拒绝。"""
+        if isinstance(value, str) and value != "unknown":
+            try:
+                return resolve_intent(value).intent_id
+            except KeyError:
+                pass
+        return value
+
+    @property
+    def task_type(self) -> Literal["refund", "logistics"] | None:
+        """将业务意图映射到稳定任务类型；知识咨询和未知意图没有任务类型。"""
+        if self.business_intent == "unknown":
+            return None
+        return resolve_intent(self.business_intent).task_type
 
 
 class Ambiguity(Contract):
@@ -88,6 +108,7 @@ class MessageUnderstanding(UnderstandingPayload):
     """解析结果；source 由服务端添加，不接受模型声明结果来源。"""
 
     source: Literal["llm"] = "llm"
+    taxonomy_version: Literal["1.0"] = "1.0"
 
 
 class PendingClarificationContext(Contract):

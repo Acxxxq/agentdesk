@@ -8,6 +8,7 @@
 |---|---|---|
 | 系统架构 | [架构](ARCHITECTURE.md) | [Architecture](../ARCHITECTURE.md) |
 | 意图识别 | [Demo 指南](INTENT_DEMO.md) | [Demo guide](../INTENT_DEMO.md) |
+| 意图分类体系 | [Taxonomy v1](INTENT_TAXONOMY.md) | [Taxonomy v1](../INTENT_TAXONOMY.md) |
 | 代码规范 | [代码规范](CODE_STYLE.md) | [Code style](../CODE_STYLE.md) |
 | 开发日志 | [开发日志](DEVLOG.md) | [Development log](../DEVLOG.md) |
 | Docker 环境 | [Docker 指南](DOCKER.md) | [Docker guide](../DOCKER.md) |

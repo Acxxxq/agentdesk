@@ -1,0 +1,3978 @@
+[
+  {
+    "scenario_id": "refund_collect_all_slots-taxonomy-v1",
+    "category": "slot_collection",
+    "description": "退款任务连续补齐订单号和原因，状态应从 collecting 变为 ready。",
+    "conversation_id": "489c33ba-61fb-48ea-ac11-3cf3bfdbcb20",
+    "passed": true,
+    "turns": [
+      {
+        "turn": 1,
+        "message": "我要申请退款",
+        "expected": {
+          "intents": [
+            "refund.apply"
+          ],
+          "acts": [
+            {
+              "business_intent": "refund.apply",
+              "dialogue_act": [
+                "start_task",
+                "answer_pending"
+              ]
+            }
+          ],
+          "decision_actions": [
+            "create_task"
+          ],
+          "event_types": [
+            "task_created"
+          ],
+          "task_statuses": {
+            "refund": [
+              "collecting"
+            ]
+          },
+          "pending_question": {
+            "task_type": "refund",
+            "slot_name": "order_id"
+          },
+          "reply_contains": [
+            "退款任务",
+            "订单号"
+          ]
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "489c33ba-61fb-48ea-ac11-3cf3bfdbcb20",
+          "reply": "已为你建立退款任务。请提供订单号。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {},
+                "utterance_span": "我要申请退款",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "create_task",
+                "act_id": "a1",
+                "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+                "task_type": "refund",
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "489c33ba-61fb-48ea-ac11-3cf3bfdbcb20",
+            "version": 1,
+            "tasks": [
+              {
+                "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+                "type": "refund",
+                "status": "collecting",
+                "slots": {}
+              }
+            ],
+            "active_task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+              "intent": null
+            },
+            "pending_question": {
+              "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+              "slot_name": "order_id",
+              "question": "请提供订单号。"
+            },
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "489c33ba-61fb-48ea-ac11-3cf3bfdbcb20:1:1:task_created:cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+              "conversation_id": "489c33ba-61fb-48ea-ac11-3cf3bfdbcb20",
+              "version": 1,
+              "event_type": "task_created",
+              "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+              "payload": {
+                "type": "refund",
+                "slots": {},
+                "status": "collecting"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 2378.56,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "act_1": true,
+            "decision_actions": true,
+            "event_types": true,
+            "task_statuses": true,
+            "pending_question": true,
+            "internal_task_ids_hidden": true,
+            "reply_contains": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 2,
+        "message": "订单号是 R10001",
+        "expected": {
+          "intents": [
+            "refund.apply"
+          ],
+          "acts": [
+            {
+              "business_intent": "refund.apply",
+              "dialogue_act": [
+                "answer_pending",
+                "start_task"
+              ],
+              "entities": {
+                "order_id": "R10001"
+              }
+            }
+          ],
+          "decision_actions": [
+            "fill_slot"
+          ],
+          "event_types": [
+            "task_slot_filled"
+          ],
+          "task_statuses": {
+            "refund": [
+              "collecting"
+            ]
+          },
+          "pending_question": {
+            "task_type": "refund",
+            "slot_name": "reason"
+          },
+          "reply_contains": [
+            "已记录",
+            "退款原因"
+          ]
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "489c33ba-61fb-48ea-ac11-3cf3bfdbcb20",
+          "reply": "已记录你补充的信息。请提供退款原因。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "answer_pending",
+                "target_hint": "active_task",
+                "referenced_task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+                "entities": {
+                  "order_id": "R10001"
+                },
+                "utterance_span": "订单号是 R10001",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "fill_slot",
+                "act_id": "a1",
+                "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+                "task_type": "refund",
+                "entities": {
+                  "order_id": "R10001"
+                },
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "489c33ba-61fb-48ea-ac11-3cf3bfdbcb20",
+            "version": 2,
+            "tasks": [
+              {
+                "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+                "type": "refund",
+                "status": "collecting",
+                "slots": {
+                  "order_id": "R10001"
+                }
+              }
+            ],
+            "active_task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+              "intent": null
+            },
+            "pending_question": {
+              "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+              "slot_name": "reason",
+              "question": "请提供退款原因。"
+            },
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "489c33ba-61fb-48ea-ac11-3cf3bfdbcb20:2:1:task_slot_filled:cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+              "conversation_id": "489c33ba-61fb-48ea-ac11-3cf3bfdbcb20",
+              "version": 2,
+              "event_type": "task_slot_filled",
+              "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+              "payload": {
+                "slots": {
+                  "order_id": "R10001"
+                },
+                "status": "collecting"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 2146.04,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "act_1": true,
+            "decision_actions": true,
+            "event_types": true,
+            "task_statuses": true,
+            "pending_question": true,
+            "internal_task_ids_hidden": true,
+            "reply_contains": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 3,
+        "message": "原因是重复购买",
+        "expected": {
+          "intents": [
+            "refund.apply"
+          ],
+          "acts": [
+            {
+              "business_intent": "refund.apply",
+              "dialogue_act": [
+                "answer_pending",
+                "start_task"
+              ],
+              "entities": {
+                "reason": "重复购买"
+              }
+            }
+          ],
+          "decision_actions": [
+            "fill_slot"
+          ],
+          "event_types": [
+            "task_slot_filled"
+          ],
+          "task_statuses": {
+            "refund": [
+              "ready"
+            ]
+          },
+          "pending_question": null,
+          "reply_contains": [
+            "已记录"
+          ]
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "489c33ba-61fb-48ea-ac11-3cf3bfdbcb20",
+          "reply": "已记录你补充的信息。所需信息已齐备；当前还没有连接真实退款服务。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "answer_pending",
+                "target_hint": "active_task",
+                "referenced_task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+                "entities": {
+                  "reason": "重复购买"
+                },
+                "utterance_span": "原因是重复购买",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "fill_slot",
+                "act_id": "a1",
+                "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+                "task_type": "refund",
+                "entities": {
+                  "reason": "重复购买"
+                },
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "489c33ba-61fb-48ea-ac11-3cf3bfdbcb20",
+            "version": 3,
+            "tasks": [
+              {
+                "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+                "type": "refund",
+                "status": "ready",
+                "slots": {
+                  "order_id": "R10001",
+                  "reason": "重复购买"
+                }
+              }
+            ],
+            "active_task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+              "intent": null
+            },
+            "pending_question": null,
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "489c33ba-61fb-48ea-ac11-3cf3bfdbcb20:3:1:task_slot_filled:cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+              "conversation_id": "489c33ba-61fb-48ea-ac11-3cf3bfdbcb20",
+              "version": 3,
+              "event_type": "task_slot_filled",
+              "task_id": "cd47d4c7-6a0e-5dc1-81b9-f340f98c2312",
+              "payload": {
+                "slots": {
+                  "reason": "重复购买"
+                },
+                "status": "ready"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1859.67,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "act_1": true,
+            "decision_actions": true,
+            "event_types": true,
+            "task_statuses": true,
+            "pending_question": true,
+            "internal_task_ids_hidden": true,
+            "reply_contains": true
+          },
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "cancel_and_switch_to_logistics-taxonomy-v1",
+    "category": "topic_switch",
+    "description": "取消退款后切换到物流查询，订单号应归属新物流任务。",
+    "conversation_id": "dfa31032-a505-4b37-975d-d8fc06670a3e",
+    "passed": true,
+    "turns": [
+      {
+        "turn": 1,
+        "message": "我要申请退款",
+        "expected": {
+          "intents": [
+            "refund.apply"
+          ],
+          "decision_actions": [
+            "create_task"
+          ],
+          "task_statuses": {
+            "refund": [
+              "collecting"
+            ]
+          },
+          "pending_question": {
+            "task_type": "refund",
+            "slot_name": "order_id"
+          }
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "dfa31032-a505-4b37-975d-d8fc06670a3e",
+          "reply": "已为你建立退款任务。请提供订单号。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {},
+                "utterance_span": "我要申请退款",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "create_task",
+                "act_id": "a1",
+                "task_id": "b22f1078-af2f-59b6-a98c-b316d7e522a0",
+                "task_type": "refund",
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "dfa31032-a505-4b37-975d-d8fc06670a3e",
+            "version": 1,
+            "tasks": [
+              {
+                "task_id": "b22f1078-af2f-59b6-a98c-b316d7e522a0",
+                "type": "refund",
+                "status": "collecting",
+                "slots": {}
+              }
+            ],
+            "active_task_id": "b22f1078-af2f-59b6-a98c-b316d7e522a0",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "b22f1078-af2f-59b6-a98c-b316d7e522a0",
+              "intent": null
+            },
+            "pending_question": {
+              "task_id": "b22f1078-af2f-59b6-a98c-b316d7e522a0",
+              "slot_name": "order_id",
+              "question": "请提供订单号。"
+            },
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "dfa31032-a505-4b37-975d-d8fc06670a3e:1:1:task_created:b22f1078-af2f-59b6-a98c-b316d7e522a0",
+              "conversation_id": "dfa31032-a505-4b37-975d-d8fc06670a3e",
+              "version": 1,
+              "event_type": "task_created",
+              "task_id": "b22f1078-af2f-59b6-a98c-b316d7e522a0",
+              "payload": {
+                "type": "refund",
+                "slots": {},
+                "status": "collecting"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1577.75,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "decision_actions": true,
+            "task_statuses": true,
+            "pending_question": true,
+            "internal_task_ids_hidden": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 2,
+        "message": "先不退了，我昨天买了个东西，请帮我查一下物流到哪了",
+        "expected": {
+          "intents": [
+            "refund.apply",
+            "logistics.track"
+          ],
+          "acts": [
+            {
+              "business_intent": "refund.apply",
+              "dialogue_act": [
+                "cancel",
+                "cancel_task"
+              ]
+            },
+            {
+              "business_intent": "logistics.track",
+              "dialogue_act": [
+                "start_task",
+                "answer_pending"
+              ]
+            }
+          ],
+          "decision_actions": [
+            "cancel_task",
+            "clarify"
+          ],
+          "event_types": [
+            "task_cancelled",
+            "clarification_requested"
+          ],
+          "task_statuses": {
+            "refund": [
+              "cancelled"
+            ]
+          },
+          "pending_clarification": "parameter",
+          "reply_contains": [
+            "已取消",
+            "订单号"
+          ]
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "dfa31032-a505-4b37-975d-d8fc06670a3e",
+          "reply": "已取消这项退款申请。\n\n请提供要查询物流的订单号。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "cancel",
+                "target_hint": "active_task",
+                "referenced_task_id": "b22f1078-af2f-59b6-a98c-b316d7e522a0",
+                "entities": {},
+                "utterance_span": "先不退了",
+                "uncertainty": "low"
+              },
+              {
+                "act_id": "a2",
+                "business_intent": "logistics.track",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {},
+                "utterance_span": "我昨天买了个东西，请帮我查一下物流到哪了",
+                "uncertainty": "medium"
+              }
+            ],
+            "ambiguities": [
+              {
+                "kind": "parameter",
+                "candidate_values": [],
+                "target_slot": "order_id",
+                "target_act_id": "a2",
+                "reason": "用户要查物流但未提供订单号，无法确定要查询的订单"
+              }
+            ],
+            "relations": [
+              {
+                "source_act_id": "a1",
+                "target_act_id": "a2",
+                "kind": "sequence",
+                "condition": null
+              }
+            ],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "cancel_task",
+                "act_id": "a1",
+                "task_id": "b22f1078-af2f-59b6-a98c-b316d7e522a0",
+                "task_type": "refund",
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              },
+              {
+                "action": "clarify",
+                "act_id": null,
+                "task_id": null,
+                "task_type": null,
+                "entities": {},
+                "question": "请提供要查询物流的订单号。",
+                "clarification": {
+                  "clarification_id": "2590be64-61cb-5505-be3d-34a223af98b7",
+                  "kind": "parameter",
+                  "question": "请提供要查询物流的订单号。",
+                  "original_message": "先不退了，我昨天买了个东西，请帮我查一下物流到哪了",
+                  "candidate_values": [],
+                  "candidate_task_ids": [],
+                  "target_act_id": "a2",
+                  "target_ambiguity_index": 0,
+                  "target_slot": "order_id",
+                  "preserved_entities": {},
+                  "original_acts": [
+                    {
+                      "act_id": "a2",
+                      "business_intent": "logistics.track",
+                      "dialogue_act": "start_task",
+                      "target_hint": "new_task",
+                      "referenced_task_id": null,
+                      "entities": {},
+                      "utterance_span": "我昨天买了个东西，请帮我查一下物流到哪了",
+                      "uncertainty": "medium"
+                    }
+                  ],
+                  "original_ambiguities": [
+                    {
+                      "kind": "parameter",
+                      "candidate_values": [],
+                      "target_slot": "order_id",
+                      "target_act_id": "a2",
+                      "reason": "用户要查物流但未提供订单号，无法确定要查询的订单"
+                    }
+                  ],
+                  "original_relations": []
+                },
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": true
+          },
+          "state": {
+            "conversation_id": "dfa31032-a505-4b37-975d-d8fc06670a3e",
+            "version": 2,
+            "tasks": [
+              {
+                "task_id": "b22f1078-af2f-59b6-a98c-b316d7e522a0",
+                "type": "refund",
+                "status": "cancelled",
+                "slots": {}
+              }
+            ],
+            "active_task_id": null,
+            "current_focus": {
+              "kind": "none",
+              "task_id": null,
+              "intent": null
+            },
+            "pending_question": null,
+            "pending_clarification": {
+              "clarification_id": "2590be64-61cb-5505-be3d-34a223af98b7",
+              "kind": "parameter",
+              "question": "请提供要查询物流的订单号。",
+              "original_message": "先不退了，我昨天买了个东西，请帮我查一下物流到哪了",
+              "candidate_values": [],
+              "candidate_task_ids": [],
+              "target_act_id": "a2",
+              "target_ambiguity_index": 0,
+              "target_slot": "order_id",
+              "preserved_entities": {},
+              "original_acts": [
+                {
+                  "act_id": "a2",
+                  "business_intent": "logistics.track",
+                  "dialogue_act": "start_task",
+                  "target_hint": "new_task",
+                  "referenced_task_id": null,
+                  "entities": {},
+                  "utterance_span": "我昨天买了个东西，请帮我查一下物流到哪了",
+                  "uncertainty": "medium"
+                }
+              ],
+              "original_ambiguities": [
+                {
+                  "kind": "parameter",
+                  "candidate_values": [],
+                  "target_slot": "order_id",
+                  "target_act_id": "a2",
+                  "reason": "用户要查物流但未提供订单号，无法确定要查询的订单"
+                }
+              ],
+              "original_relations": []
+            },
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "dfa31032-a505-4b37-975d-d8fc06670a3e:2:1:task_cancelled:b22f1078-af2f-59b6-a98c-b316d7e522a0",
+              "conversation_id": "dfa31032-a505-4b37-975d-d8fc06670a3e",
+              "version": 2,
+              "event_type": "task_cancelled",
+              "task_id": "b22f1078-af2f-59b6-a98c-b316d7e522a0",
+              "payload": {}
+            },
+            {
+              "event_id": "dfa31032-a505-4b37-975d-d8fc06670a3e:2:2:clarification_requested:-",
+              "conversation_id": "dfa31032-a505-4b37-975d-d8fc06670a3e",
+              "version": 2,
+              "event_type": "clarification_requested",
+              "task_id": null,
+              "payload": {
+                "clarification_id": "2590be64-61cb-5505-be3d-34a223af98b7",
+                "kind": "parameter",
+                "question": "请提供要查询物流的订单号。"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 2692.94,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "act_1": true,
+            "act_2": true,
+            "decision_actions": true,
+            "event_types": true,
+            "task_statuses": true,
+            "pending_clarification": true,
+            "internal_task_ids_hidden": true,
+            "reply_contains": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 3,
+        "message": "物流订单号是 L20001",
+        "expected": {
+          "intents": [
+            "logistics.track"
+          ],
+          "acts": [
+            {
+              "business_intent": "logistics.track",
+              "entities": {
+                "order_id": "L20001"
+              }
+            }
+          ],
+          "decision_actions": [
+            "create_task",
+            "resolve_clarification"
+          ],
+          "event_types": [
+            "task_created"
+          ],
+          "task_statuses": {
+            "refund": [
+              "cancelled"
+            ],
+            "logistics": [
+              "ready"
+            ]
+          },
+          "pending_clarification": null,
+          "reply_contains": [
+            "物流查询任务"
+          ]
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "dfa31032-a505-4b37-975d-d8fc06670a3e",
+          "reply": "已为你建立物流查询任务。订单信息已齐备；当前还没有连接真实物流查询服务。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "logistics.track",
+                "dialogue_act": "answer_pending",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {
+                  "order_id": "L20001"
+                },
+                "utterance_span": "物流订单号是 L20001",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "resolve_clarification",
+                "act_id": null,
+                "task_id": null,
+                "task_type": null,
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": "2590be64-61cb-5505-be3d-34a223af98b7",
+                "reason": null
+              },
+              {
+                "action": "create_task",
+                "act_id": "a2",
+                "task_id": "6b28f027-103f-5dc7-8746-4eb8fddaf499",
+                "task_type": "logistics",
+                "entities": {
+                  "order_id": "L20001"
+                },
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "dfa31032-a505-4b37-975d-d8fc06670a3e",
+            "version": 3,
+            "tasks": [
+              {
+                "task_id": "b22f1078-af2f-59b6-a98c-b316d7e522a0",
+                "type": "refund",
+                "status": "cancelled",
+                "slots": {}
+              },
+              {
+                "task_id": "6b28f027-103f-5dc7-8746-4eb8fddaf499",
+                "type": "logistics",
+                "status": "ready",
+                "slots": {
+                  "order_id": "L20001"
+                }
+              }
+            ],
+            "active_task_id": "6b28f027-103f-5dc7-8746-4eb8fddaf499",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "6b28f027-103f-5dc7-8746-4eb8fddaf499",
+              "intent": null
+            },
+            "pending_question": null,
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "dfa31032-a505-4b37-975d-d8fc06670a3e:3:1:clarification_resolved:-",
+              "conversation_id": "dfa31032-a505-4b37-975d-d8fc06670a3e",
+              "version": 3,
+              "event_type": "clarification_resolved",
+              "task_id": null,
+              "payload": {
+                "clarification_id": "2590be64-61cb-5505-be3d-34a223af98b7"
+              }
+            },
+            {
+              "event_id": "dfa31032-a505-4b37-975d-d8fc06670a3e:3:2:task_created:6b28f027-103f-5dc7-8746-4eb8fddaf499",
+              "conversation_id": "dfa31032-a505-4b37-975d-d8fc06670a3e",
+              "version": 3,
+              "event_type": "task_created",
+              "task_id": "6b28f027-103f-5dc7-8746-4eb8fddaf499",
+              "payload": {
+                "type": "logistics",
+                "slots": {
+                  "order_id": "L20001"
+                },
+                "status": "ready"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 2103.71,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "act_1": true,
+            "decision_actions": true,
+            "event_types": true,
+            "task_statuses": true,
+            "pending_clarification": true,
+            "internal_task_ids_hidden": true,
+            "reply_contains": true
+          },
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "parallel_refund_and_logistics-taxonomy-v1",
+    "category": "multi_action",
+    "description": "一句话创建参数齐全的退款和缺参的物流请求，之后只补物流订单号。",
+    "conversation_id": "0eafa2ab-fc99-4a40-84b8-e1815faaf8e2",
+    "passed": true,
+    "turns": [
+      {
+        "turn": 1,
+        "message": "退款订单 R20001，原因是买错了；另外帮我查下物流",
+        "expected": {
+          "intents": [
+            "refund.apply",
+            "logistics.track"
+          ],
+          "acts": [
+            {
+              "business_intent": "refund.apply",
+              "entities": {
+                "order_id": "R20001",
+                "reason": "买错了"
+              }
+            },
+            {
+              "business_intent": "logistics.track"
+            }
+          ],
+          "decision_actions": [
+            "create_task",
+            "clarify"
+          ],
+          "event_types": [
+            "task_created",
+            "clarification_requested"
+          ],
+          "task_statuses": {
+            "refund": [
+              "ready"
+            ]
+          },
+          "pending_clarification": "parameter",
+          "reply_contains": [
+            "退款任务",
+            "物流",
+            "订单号"
+          ]
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "0eafa2ab-fc99-4a40-84b8-e1815faaf8e2",
+          "reply": "已为你建立退款任务。所需信息已齐备；当前还没有连接真实退款服务。\n\n请提供要查询物流的订单号。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {
+                  "order_id": "R20001",
+                  "reason": "买错了"
+                },
+                "utterance_span": "退款订单 R20001，原因是买错了",
+                "uncertainty": "low"
+              },
+              {
+                "act_id": "a2",
+                "business_intent": "logistics.track",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {},
+                "utterance_span": "另外帮我查下物流",
+                "uncertainty": "medium"
+              }
+            ],
+            "ambiguities": [
+              {
+                "kind": "parameter",
+                "candidate_values": [],
+                "target_slot": "order_id",
+                "target_act_id": "a2",
+                "reason": "用户要求查物流但未指明订单号"
+              }
+            ],
+            "relations": [
+              {
+                "source_act_id": "a1",
+                "target_act_id": "a2",
+                "kind": "parallel",
+                "condition": null
+              }
+            ],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "create_task",
+                "act_id": "a1",
+                "task_id": "8b3b8a64-a86a-5663-8dfa-4241bd443827",
+                "task_type": "refund",
+                "entities": {
+                  "order_id": "R20001",
+                  "reason": "买错了"
+                },
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              },
+              {
+                "action": "clarify",
+                "act_id": null,
+                "task_id": null,
+                "task_type": null,
+                "entities": {},
+                "question": "请提供要查询物流的订单号。",
+                "clarification": {
+                  "clarification_id": "454bfece-aa1f-520e-9149-2bd17aa1955e",
+                  "kind": "parameter",
+                  "question": "请提供要查询物流的订单号。",
+                  "original_message": "退款订单 R20001，原因是买错了；另外帮我查下物流",
+                  "candidate_values": [],
+                  "candidate_task_ids": [],
+                  "target_act_id": "a2",
+                  "target_ambiguity_index": 0,
+                  "target_slot": "order_id",
+                  "preserved_entities": {},
+                  "original_acts": [
+                    {
+                      "act_id": "a2",
+                      "business_intent": "logistics.track",
+                      "dialogue_act": "start_task",
+                      "target_hint": "new_task",
+                      "referenced_task_id": null,
+                      "entities": {},
+                      "utterance_span": "另外帮我查下物流",
+                      "uncertainty": "medium"
+                    }
+                  ],
+                  "original_ambiguities": [
+                    {
+                      "kind": "parameter",
+                      "candidate_values": [],
+                      "target_slot": "order_id",
+                      "target_act_id": "a2",
+                      "reason": "用户要求查物流但未指明订单号"
+                    }
+                  ],
+                  "original_relations": []
+                },
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": true
+          },
+          "state": {
+            "conversation_id": "0eafa2ab-fc99-4a40-84b8-e1815faaf8e2",
+            "version": 1,
+            "tasks": [
+              {
+                "task_id": "8b3b8a64-a86a-5663-8dfa-4241bd443827",
+                "type": "refund",
+                "status": "ready",
+                "slots": {
+                  "order_id": "R20001",
+                  "reason": "买错了"
+                }
+              }
+            ],
+            "active_task_id": "8b3b8a64-a86a-5663-8dfa-4241bd443827",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "8b3b8a64-a86a-5663-8dfa-4241bd443827",
+              "intent": null
+            },
+            "pending_question": null,
+            "pending_clarification": {
+              "clarification_id": "454bfece-aa1f-520e-9149-2bd17aa1955e",
+              "kind": "parameter",
+              "question": "请提供要查询物流的订单号。",
+              "original_message": "退款订单 R20001，原因是买错了；另外帮我查下物流",
+              "candidate_values": [],
+              "candidate_task_ids": [],
+              "target_act_id": "a2",
+              "target_ambiguity_index": 0,
+              "target_slot": "order_id",
+              "preserved_entities": {},
+              "original_acts": [
+                {
+                  "act_id": "a2",
+                  "business_intent": "logistics.track",
+                  "dialogue_act": "start_task",
+                  "target_hint": "new_task",
+                  "referenced_task_id": null,
+                  "entities": {},
+                  "utterance_span": "另外帮我查下物流",
+                  "uncertainty": "medium"
+                }
+              ],
+              "original_ambiguities": [
+                {
+                  "kind": "parameter",
+                  "candidate_values": [],
+                  "target_slot": "order_id",
+                  "target_act_id": "a2",
+                  "reason": "用户要求查物流但未指明订单号"
+                }
+              ],
+              "original_relations": []
+            },
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "0eafa2ab-fc99-4a40-84b8-e1815faaf8e2:1:1:task_created:8b3b8a64-a86a-5663-8dfa-4241bd443827",
+              "conversation_id": "0eafa2ab-fc99-4a40-84b8-e1815faaf8e2",
+              "version": 1,
+              "event_type": "task_created",
+              "task_id": "8b3b8a64-a86a-5663-8dfa-4241bd443827",
+              "payload": {
+                "type": "refund",
+                "slots": {
+                  "order_id": "R20001",
+                  "reason": "买错了"
+                },
+                "status": "ready"
+              }
+            },
+            {
+              "event_id": "0eafa2ab-fc99-4a40-84b8-e1815faaf8e2:1:2:clarification_requested:-",
+              "conversation_id": "0eafa2ab-fc99-4a40-84b8-e1815faaf8e2",
+              "version": 1,
+              "event_type": "clarification_requested",
+              "task_id": null,
+              "payload": {
+                "clarification_id": "454bfece-aa1f-520e-9149-2bd17aa1955e",
+                "kind": "parameter",
+                "question": "请提供要查询物流的订单号。"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 2858.01,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "act_1": true,
+            "act_2": true,
+            "decision_actions": true,
+            "event_types": true,
+            "task_statuses": true,
+            "pending_clarification": true,
+            "internal_task_ids_hidden": true,
+            "reply_contains": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 2,
+        "message": "物流单号 L20002",
+        "expected": {
+          "intents": [
+            "logistics.track"
+          ],
+          "acts": [
+            {
+              "business_intent": "logistics.track",
+              "entities": {
+                "order_id": "L20002"
+              }
+            }
+          ],
+          "event_types": [
+            "task_created"
+          ],
+          "task_statuses": {
+            "refund": [
+              "ready"
+            ],
+            "logistics": [
+              "ready"
+            ]
+          },
+          "pending_clarification": null,
+          "reply_contains": [
+            "物流查询任务"
+          ]
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "0eafa2ab-fc99-4a40-84b8-e1815faaf8e2",
+          "reply": "已为你建立物流查询任务。订单信息已齐备；当前还没有连接真实物流查询服务。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "logistics.track",
+                "dialogue_act": "answer_pending",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {
+                  "order_id": "L20002"
+                },
+                "utterance_span": "物流单号 L20002",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "resolve_clarification",
+                "act_id": null,
+                "task_id": null,
+                "task_type": null,
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": "454bfece-aa1f-520e-9149-2bd17aa1955e",
+                "reason": null
+              },
+              {
+                "action": "create_task",
+                "act_id": "a2",
+                "task_id": "b929bff4-d09c-5bef-ad01-b2001fc82f6a",
+                "task_type": "logistics",
+                "entities": {
+                  "order_id": "L20002"
+                },
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "0eafa2ab-fc99-4a40-84b8-e1815faaf8e2",
+            "version": 2,
+            "tasks": [
+              {
+                "task_id": "8b3b8a64-a86a-5663-8dfa-4241bd443827",
+                "type": "refund",
+                "status": "ready",
+                "slots": {
+                  "order_id": "R20001",
+                  "reason": "买错了"
+                }
+              },
+              {
+                "task_id": "b929bff4-d09c-5bef-ad01-b2001fc82f6a",
+                "type": "logistics",
+                "status": "ready",
+                "slots": {
+                  "order_id": "L20002"
+                }
+              }
+            ],
+            "active_task_id": "b929bff4-d09c-5bef-ad01-b2001fc82f6a",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "b929bff4-d09c-5bef-ad01-b2001fc82f6a",
+              "intent": null
+            },
+            "pending_question": null,
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "0eafa2ab-fc99-4a40-84b8-e1815faaf8e2:2:1:clarification_resolved:-",
+              "conversation_id": "0eafa2ab-fc99-4a40-84b8-e1815faaf8e2",
+              "version": 2,
+              "event_type": "clarification_resolved",
+              "task_id": null,
+              "payload": {
+                "clarification_id": "454bfece-aa1f-520e-9149-2bd17aa1955e"
+              }
+            },
+            {
+              "event_id": "0eafa2ab-fc99-4a40-84b8-e1815faaf8e2:2:2:task_created:b929bff4-d09c-5bef-ad01-b2001fc82f6a",
+              "conversation_id": "0eafa2ab-fc99-4a40-84b8-e1815faaf8e2",
+              "version": 2,
+              "event_type": "task_created",
+              "task_id": "b929bff4-d09c-5bef-ad01-b2001fc82f6a",
+              "payload": {
+                "type": "logistics",
+                "slots": {
+                  "order_id": "L20002"
+                },
+                "status": "ready"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 2950.16,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "act_1": true,
+            "event_types": true,
+            "task_statuses": true,
+            "pending_clarification": true,
+            "internal_task_ids_hidden": true,
+            "reply_contains": true
+          },
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "refer_to_older_pending_task-taxonomy-v1",
+    "category": "task_reference",
+    "description": "跨话题期间保留退款待补参数，并把后续订单号绑定到用户明确指向的任务。",
+    "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+    "passed": true,
+    "turns": [
+      {
+        "turn": 1,
+        "message": "我要申请退款",
+        "expected": {
+          "intents": [
+            "refund.apply"
+          ],
+          "decision_actions": [
+            "create_task"
+          ],
+          "task_statuses": {
+            "refund": [
+              "collecting"
+            ]
+          },
+          "pending_question": {
+            "task_type": "refund",
+            "slot_name": "order_id"
+          }
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+          "reply": "已为你建立退款任务。请提供订单号。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {},
+                "utterance_span": "我要申请退款",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "create_task",
+                "act_id": "a1",
+                "task_id": "e2b41695-404a-502d-985a-0b31f11dd630",
+                "task_type": "refund",
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+            "version": 1,
+            "tasks": [
+              {
+                "task_id": "e2b41695-404a-502d-985a-0b31f11dd630",
+                "type": "refund",
+                "status": "collecting",
+                "slots": {}
+              }
+            ],
+            "active_task_id": "e2b41695-404a-502d-985a-0b31f11dd630",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "e2b41695-404a-502d-985a-0b31f11dd630",
+              "intent": null
+            },
+            "pending_question": {
+              "task_id": "e2b41695-404a-502d-985a-0b31f11dd630",
+              "slot_name": "order_id",
+              "question": "请提供订单号。"
+            },
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a:1:1:task_created:e2b41695-404a-502d-985a-0b31f11dd630",
+              "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+              "version": 1,
+              "event_type": "task_created",
+              "task_id": "e2b41695-404a-502d-985a-0b31f11dd630",
+              "payload": {
+                "type": "refund",
+                "slots": {},
+                "status": "collecting"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1807.92,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "decision_actions": true,
+            "task_statuses": true,
+            "pending_question": true,
+            "internal_task_ids_hidden": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 2,
+        "message": "先不退了，我昨天买了个东西，请帮我查一下物流到哪了",
+        "expected": {
+          "intents": [
+            "refund.apply",
+            "logistics.track"
+          ],
+          "decision_actions": [
+            "cancel_task",
+            "clarify"
+          ],
+          "task_statuses": {
+            "refund": [
+              "cancelled"
+            ]
+          },
+          "pending_clarification": "parameter"
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+          "reply": "已取消这项退款申请。\n\n请提供要查询物流的订单号。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "cancel",
+                "target_hint": "active_task",
+                "referenced_task_id": "e2b41695-404a-502d-985a-0b31f11dd630",
+                "entities": {},
+                "utterance_span": "先不退了",
+                "uncertainty": "low"
+              },
+              {
+                "act_id": "a2",
+                "business_intent": "logistics.track",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {},
+                "utterance_span": "我昨天买了个东西，请帮我查一下物流到哪了",
+                "uncertainty": "medium"
+              }
+            ],
+            "ambiguities": [
+              {
+                "kind": "parameter",
+                "candidate_values": [],
+                "target_slot": "order_id",
+                "target_act_id": "a2",
+                "reason": "用户要查物流但未提供订单号，无法确定要查询的订单"
+              }
+            ],
+            "relations": [
+              {
+                "source_act_id": "a1",
+                "target_act_id": "a2",
+                "kind": "sequence",
+                "condition": null
+              }
+            ],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "cancel_task",
+                "act_id": "a1",
+                "task_id": "e2b41695-404a-502d-985a-0b31f11dd630",
+                "task_type": "refund",
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              },
+              {
+                "action": "clarify",
+                "act_id": null,
+                "task_id": null,
+                "task_type": null,
+                "entities": {},
+                "question": "请提供要查询物流的订单号。",
+                "clarification": {
+                  "clarification_id": "abc2a887-20c3-535f-b0d0-c9bd46a141e0",
+                  "kind": "parameter",
+                  "question": "请提供要查询物流的订单号。",
+                  "original_message": "先不退了，我昨天买了个东西，请帮我查一下物流到哪了",
+                  "candidate_values": [],
+                  "candidate_task_ids": [],
+                  "target_act_id": "a2",
+                  "target_ambiguity_index": 0,
+                  "target_slot": "order_id",
+                  "preserved_entities": {},
+                  "original_acts": [
+                    {
+                      "act_id": "a2",
+                      "business_intent": "logistics.track",
+                      "dialogue_act": "start_task",
+                      "target_hint": "new_task",
+                      "referenced_task_id": null,
+                      "entities": {},
+                      "utterance_span": "我昨天买了个东西，请帮我查一下物流到哪了",
+                      "uncertainty": "medium"
+                    }
+                  ],
+                  "original_ambiguities": [
+                    {
+                      "kind": "parameter",
+                      "candidate_values": [],
+                      "target_slot": "order_id",
+                      "target_act_id": "a2",
+                      "reason": "用户要查物流但未提供订单号，无法确定要查询的订单"
+                    }
+                  ],
+                  "original_relations": []
+                },
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": true
+          },
+          "state": {
+            "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+            "version": 2,
+            "tasks": [
+              {
+                "task_id": "e2b41695-404a-502d-985a-0b31f11dd630",
+                "type": "refund",
+                "status": "cancelled",
+                "slots": {}
+              }
+            ],
+            "active_task_id": null,
+            "current_focus": {
+              "kind": "none",
+              "task_id": null,
+              "intent": null
+            },
+            "pending_question": null,
+            "pending_clarification": {
+              "clarification_id": "abc2a887-20c3-535f-b0d0-c9bd46a141e0",
+              "kind": "parameter",
+              "question": "请提供要查询物流的订单号。",
+              "original_message": "先不退了，我昨天买了个东西，请帮我查一下物流到哪了",
+              "candidate_values": [],
+              "candidate_task_ids": [],
+              "target_act_id": "a2",
+              "target_ambiguity_index": 0,
+              "target_slot": "order_id",
+              "preserved_entities": {},
+              "original_acts": [
+                {
+                  "act_id": "a2",
+                  "business_intent": "logistics.track",
+                  "dialogue_act": "start_task",
+                  "target_hint": "new_task",
+                  "referenced_task_id": null,
+                  "entities": {},
+                  "utterance_span": "我昨天买了个东西，请帮我查一下物流到哪了",
+                  "uncertainty": "medium"
+                }
+              ],
+              "original_ambiguities": [
+                {
+                  "kind": "parameter",
+                  "candidate_values": [],
+                  "target_slot": "order_id",
+                  "target_act_id": "a2",
+                  "reason": "用户要查物流但未提供订单号，无法确定要查询的订单"
+                }
+              ],
+              "original_relations": []
+            },
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a:2:1:task_cancelled:e2b41695-404a-502d-985a-0b31f11dd630",
+              "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+              "version": 2,
+              "event_type": "task_cancelled",
+              "task_id": "e2b41695-404a-502d-985a-0b31f11dd630",
+              "payload": {}
+            },
+            {
+              "event_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a:2:2:clarification_requested:-",
+              "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+              "version": 2,
+              "event_type": "clarification_requested",
+              "task_id": null,
+              "payload": {
+                "clarification_id": "abc2a887-20c3-535f-b0d0-c9bd46a141e0",
+                "kind": "parameter",
+                "question": "请提供要查询物流的订单号。"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 5921.34,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "decision_actions": true,
+            "task_statuses": true,
+            "pending_clarification": true,
+            "internal_task_ids_hidden": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 3,
+        "message": "还是退款吧",
+        "expected": {
+          "intents": [
+            "refund.apply"
+          ],
+          "decision_actions": [
+            "create_task"
+          ],
+          "task_statuses": {
+            "refund": [
+              "cancelled",
+              "collecting"
+            ]
+          },
+          "pending_question": {
+            "task_type": "refund",
+            "slot_name": "order_id"
+          }
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+          "reply": "已为你建立退款任务。请提供订单号。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {},
+                "utterance_span": "还是退款吧",
+                "uncertainty": "medium"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "interrupt_clarification",
+                "act_id": null,
+                "task_id": null,
+                "task_type": null,
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": "abc2a887-20c3-535f-b0d0-c9bd46a141e0",
+                "reason": "explicit_new_task_interrupts_pending_clarification"
+              },
+              {
+                "action": "create_task",
+                "act_id": "a1",
+                "task_id": "3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+                "task_type": "refund",
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+            "version": 3,
+            "tasks": [
+              {
+                "task_id": "e2b41695-404a-502d-985a-0b31f11dd630",
+                "type": "refund",
+                "status": "cancelled",
+                "slots": {}
+              },
+              {
+                "task_id": "3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+                "type": "refund",
+                "status": "collecting",
+                "slots": {}
+              }
+            ],
+            "active_task_id": "3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+              "intent": null
+            },
+            "pending_question": {
+              "task_id": "3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+              "slot_name": "order_id",
+              "question": "请提供订单号。"
+            },
+            "pending_clarification": null,
+            "suspended_clarifications": [
+              {
+                "clarification_id": "abc2a887-20c3-535f-b0d0-c9bd46a141e0",
+                "kind": "parameter",
+                "question": "请提供要查询物流的订单号。",
+                "original_message": "先不退了，我昨天买了个东西，请帮我查一下物流到哪了",
+                "candidate_values": [],
+                "candidate_task_ids": [],
+                "target_act_id": "a2",
+                "target_ambiguity_index": 0,
+                "target_slot": "order_id",
+                "preserved_entities": {},
+                "original_acts": [
+                  {
+                    "act_id": "a2",
+                    "business_intent": "logistics.track",
+                    "dialogue_act": "start_task",
+                    "target_hint": "new_task",
+                    "referenced_task_id": null,
+                    "entities": {},
+                    "utterance_span": "我昨天买了个东西，请帮我查一下物流到哪了",
+                    "uncertainty": "medium"
+                  }
+                ],
+                "original_ambiguities": [
+                  {
+                    "kind": "parameter",
+                    "candidate_values": [],
+                    "target_slot": "order_id",
+                    "target_act_id": "a2",
+                    "reason": "用户要查物流但未提供订单号，无法确定要查询的订单"
+                  }
+                ],
+                "original_relations": []
+              }
+            ]
+          },
+          "events": [
+            {
+              "event_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a:3:1:clarification_interrupted:-",
+              "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+              "version": 3,
+              "event_type": "clarification_interrupted",
+              "task_id": null,
+              "payload": {
+                "clarification_id": "abc2a887-20c3-535f-b0d0-c9bd46a141e0"
+              }
+            },
+            {
+              "event_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a:3:2:task_created:3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+              "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+              "version": 3,
+              "event_type": "task_created",
+              "task_id": "3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+              "payload": {
+                "type": "refund",
+                "slots": {},
+                "status": "collecting"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1624.65,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "decision_actions": true,
+            "task_statuses": true,
+            "pending_question": true,
+            "internal_task_ids_hidden": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 4,
+        "message": "先告诉我刚刚那个物流，编号是 A10001",
+        "expected": {
+          "intents": [
+            "logistics.track"
+          ],
+          "acts": [
+            {
+              "business_intent": "logistics.track",
+              "entities": {
+                "order_id": "A10001"
+              }
+            }
+          ],
+          "decision_actions": [
+            "create_task"
+          ],
+          "event_types": [
+            "task_created"
+          ],
+          "task_statuses": {
+            "refund": [
+              "cancelled",
+              "collecting"
+            ],
+            "logistics": [
+              "ready"
+            ]
+          },
+          "pending_question": {
+            "task_type": "refund",
+            "slot_name": "order_id"
+          }
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+          "reply": "已为你建立物流查询任务。订单信息已齐备；当前还没有连接真实物流查询服务。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "logistics.track",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {
+                  "order_id": "A10001"
+                },
+                "utterance_span": "先告诉我刚刚那个物流，编号是 A10001",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "create_task",
+                "act_id": "a1",
+                "task_id": "60ba51a3-5be2-5cde-8bab-932b9ab6d340",
+                "task_type": "logistics",
+                "entities": {
+                  "order_id": "A10001"
+                },
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+            "version": 4,
+            "tasks": [
+              {
+                "task_id": "e2b41695-404a-502d-985a-0b31f11dd630",
+                "type": "refund",
+                "status": "cancelled",
+                "slots": {}
+              },
+              {
+                "task_id": "3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+                "type": "refund",
+                "status": "collecting",
+                "slots": {}
+              },
+              {
+                "task_id": "60ba51a3-5be2-5cde-8bab-932b9ab6d340",
+                "type": "logistics",
+                "status": "ready",
+                "slots": {
+                  "order_id": "A10001"
+                }
+              }
+            ],
+            "active_task_id": "60ba51a3-5be2-5cde-8bab-932b9ab6d340",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "60ba51a3-5be2-5cde-8bab-932b9ab6d340",
+              "intent": null
+            },
+            "pending_question": {
+              "task_id": "3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+              "slot_name": "order_id",
+              "question": "请提供订单号。"
+            },
+            "pending_clarification": null,
+            "suspended_clarifications": [
+              {
+                "clarification_id": "abc2a887-20c3-535f-b0d0-c9bd46a141e0",
+                "kind": "parameter",
+                "question": "请提供要查询物流的订单号。",
+                "original_message": "先不退了，我昨天买了个东西，请帮我查一下物流到哪了",
+                "candidate_values": [],
+                "candidate_task_ids": [],
+                "target_act_id": "a2",
+                "target_ambiguity_index": 0,
+                "target_slot": "order_id",
+                "preserved_entities": {},
+                "original_acts": [
+                  {
+                    "act_id": "a2",
+                    "business_intent": "logistics.track",
+                    "dialogue_act": "start_task",
+                    "target_hint": "new_task",
+                    "referenced_task_id": null,
+                    "entities": {},
+                    "utterance_span": "我昨天买了个东西，请帮我查一下物流到哪了",
+                    "uncertainty": "medium"
+                  }
+                ],
+                "original_ambiguities": [
+                  {
+                    "kind": "parameter",
+                    "candidate_values": [],
+                    "target_slot": "order_id",
+                    "target_act_id": "a2",
+                    "reason": "用户要查物流但未提供订单号，无法确定要查询的订单"
+                  }
+                ],
+                "original_relations": []
+              }
+            ]
+          },
+          "events": [
+            {
+              "event_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a:4:1:task_created:60ba51a3-5be2-5cde-8bab-932b9ab6d340",
+              "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+              "version": 4,
+              "event_type": "task_created",
+              "task_id": "60ba51a3-5be2-5cde-8bab-932b9ab6d340",
+              "payload": {
+                "type": "logistics",
+                "slots": {
+                  "order_id": "A10001"
+                },
+                "status": "ready"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1698.48,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "act_1": true,
+            "decision_actions": true,
+            "event_types": true,
+            "task_statuses": true,
+            "pending_question": true,
+            "internal_task_ids_hidden": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 5,
+        "message": "那个退款的编号是 B10001",
+        "expected": {
+          "intents": [
+            "refund.apply"
+          ],
+          "acts": [
+            {
+              "business_intent": "refund.apply",
+              "dialogue_act": [
+                "answer_pending",
+                "start_task"
+              ],
+              "entities": {
+                "order_id": "B10001"
+              }
+            }
+          ],
+          "decision_actions": [
+            "fill_slot"
+          ],
+          "event_types": [
+            "task_slot_filled"
+          ],
+          "task_statuses": {
+            "refund": [
+              "cancelled",
+              "collecting"
+            ],
+            "logistics": [
+              "ready"
+            ]
+          },
+          "pending_question": {
+            "task_type": "refund",
+            "slot_name": "reason"
+          },
+          "reply_contains": [
+            "已记录"
+          ]
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+          "reply": "已记录你补充的信息。请提供退款原因。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "answer_pending",
+                "target_hint": "explicit_task",
+                "referenced_task_id": "3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+                "entities": {
+                  "order_id": "B10001"
+                },
+                "utterance_span": "那个退款的编号是 B10001",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "fill_slot",
+                "act_id": "a1",
+                "task_id": "3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+                "task_type": "refund",
+                "entities": {
+                  "order_id": "B10001"
+                },
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+            "version": 5,
+            "tasks": [
+              {
+                "task_id": "e2b41695-404a-502d-985a-0b31f11dd630",
+                "type": "refund",
+                "status": "cancelled",
+                "slots": {}
+              },
+              {
+                "task_id": "3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+                "type": "refund",
+                "status": "collecting",
+                "slots": {
+                  "order_id": "B10001"
+                }
+              },
+              {
+                "task_id": "60ba51a3-5be2-5cde-8bab-932b9ab6d340",
+                "type": "logistics",
+                "status": "ready",
+                "slots": {
+                  "order_id": "A10001"
+                }
+              }
+            ],
+            "active_task_id": "60ba51a3-5be2-5cde-8bab-932b9ab6d340",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "60ba51a3-5be2-5cde-8bab-932b9ab6d340",
+              "intent": null
+            },
+            "pending_question": {
+              "task_id": "3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+              "slot_name": "reason",
+              "question": "请提供退款原因。"
+            },
+            "pending_clarification": null,
+            "suspended_clarifications": [
+              {
+                "clarification_id": "abc2a887-20c3-535f-b0d0-c9bd46a141e0",
+                "kind": "parameter",
+                "question": "请提供要查询物流的订单号。",
+                "original_message": "先不退了，我昨天买了个东西，请帮我查一下物流到哪了",
+                "candidate_values": [],
+                "candidate_task_ids": [],
+                "target_act_id": "a2",
+                "target_ambiguity_index": 0,
+                "target_slot": "order_id",
+                "preserved_entities": {},
+                "original_acts": [
+                  {
+                    "act_id": "a2",
+                    "business_intent": "logistics.track",
+                    "dialogue_act": "start_task",
+                    "target_hint": "new_task",
+                    "referenced_task_id": null,
+                    "entities": {},
+                    "utterance_span": "我昨天买了个东西，请帮我查一下物流到哪了",
+                    "uncertainty": "medium"
+                  }
+                ],
+                "original_ambiguities": [
+                  {
+                    "kind": "parameter",
+                    "candidate_values": [],
+                    "target_slot": "order_id",
+                    "target_act_id": "a2",
+                    "reason": "用户要查物流但未提供订单号，无法确定要查询的订单"
+                  }
+                ],
+                "original_relations": []
+              }
+            ]
+          },
+          "events": [
+            {
+              "event_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a:5:1:task_slot_filled:3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+              "conversation_id": "9fac54f3-02c9-46de-9bae-0102d6cc009a",
+              "version": 5,
+              "event_type": "task_slot_filled",
+              "task_id": "3936ca85-6d48-5bd7-9108-9e1885a9a3f3",
+              "payload": {
+                "slots": {
+                  "order_id": "B10001"
+                },
+                "status": "collecting"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 2160.39,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "act_1": true,
+            "decision_actions": true,
+            "event_types": true,
+            "task_statuses": true,
+            "pending_question": true,
+            "internal_task_ids_hidden": true,
+            "reply_contains": true
+          },
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "knowledge_question_does_not_destroy_task-taxonomy-v1",
+    "category": "topic_switch",
+    "description": "用户暂时咨询退款政策时，不应取消或清空未完成的退款任务。",
+    "conversation_id": "c3ab3738-d860-4466-b76c-ee5a7c104c82",
+    "passed": true,
+    "turns": [
+      {
+        "turn": 1,
+        "message": "我要申请退款",
+        "expected": {
+          "intents": [
+            "refund.apply"
+          ],
+          "decision_actions": [
+            "create_task"
+          ],
+          "task_statuses": {
+            "refund": [
+              "collecting"
+            ]
+          }
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "c3ab3738-d860-4466-b76c-ee5a7c104c82",
+          "reply": "已为你建立退款任务。请提供订单号。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {},
+                "utterance_span": "我要申请退款",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "create_task",
+                "act_id": "a1",
+                "task_id": "fb7bf33c-da3c-5c11-9bff-102949c09031",
+                "task_type": "refund",
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "c3ab3738-d860-4466-b76c-ee5a7c104c82",
+            "version": 1,
+            "tasks": [
+              {
+                "task_id": "fb7bf33c-da3c-5c11-9bff-102949c09031",
+                "type": "refund",
+                "status": "collecting",
+                "slots": {}
+              }
+            ],
+            "active_task_id": "fb7bf33c-da3c-5c11-9bff-102949c09031",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "fb7bf33c-da3c-5c11-9bff-102949c09031",
+              "intent": null
+            },
+            "pending_question": {
+              "task_id": "fb7bf33c-da3c-5c11-9bff-102949c09031",
+              "slot_name": "order_id",
+              "question": "请提供订单号。"
+            },
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "c3ab3738-d860-4466-b76c-ee5a7c104c82:1:1:task_created:fb7bf33c-da3c-5c11-9bff-102949c09031",
+              "conversation_id": "c3ab3738-d860-4466-b76c-ee5a7c104c82",
+              "version": 1,
+              "event_type": "task_created",
+              "task_id": "fb7bf33c-da3c-5c11-9bff-102949c09031",
+              "payload": {
+                "type": "refund",
+                "slots": {},
+                "status": "collecting"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1960.71,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "decision_actions": true,
+            "task_statuses": true,
+            "internal_task_ids_hidden": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 2,
+        "message": "退款一般多久到账？",
+        "expected": {
+          "intents": [
+            "policy.consult"
+          ],
+          "acts": [
+            {
+              "business_intent": "policy.consult"
+            }
+          ],
+          "decision_actions": [
+            "answer_knowledge"
+          ],
+          "task_statuses": {
+            "refund": [
+              "collecting"
+            ]
+          },
+          "pending_question": {
+            "task_type": "refund",
+            "slot_name": "order_id"
+          },
+          "reply_contains": [
+            "还没有接入政策知识库"
+          ]
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "c3ab3738-d860-4466-b76c-ee5a7c104c82",
+          "reply": "我识别到你在咨询退款政策。目前还没有接入政策知识库，所以不会编造政策答案。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "policy.consult",
+                "dialogue_act": "ask_question",
+                "target_hint": "unspecified",
+                "referenced_task_id": null,
+                "entities": {},
+                "utterance_span": "退款一般多久到账？",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "answer_knowledge",
+                "act_id": "a1",
+                "task_id": null,
+                "task_type": null,
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": "policy.consult"
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "c3ab3738-d860-4466-b76c-ee5a7c104c82",
+            "version": 2,
+            "tasks": [
+              {
+                "task_id": "fb7bf33c-da3c-5c11-9bff-102949c09031",
+                "type": "refund",
+                "status": "collecting",
+                "slots": {}
+              }
+            ],
+            "active_task_id": "fb7bf33c-da3c-5c11-9bff-102949c09031",
+            "current_focus": {
+              "kind": "policy_qa",
+              "task_id": null,
+              "intent": "policy.consult"
+            },
+            "pending_question": {
+              "task_id": "fb7bf33c-da3c-5c11-9bff-102949c09031",
+              "slot_name": "order_id",
+              "question": "请提供订单号。"
+            },
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "c3ab3738-d860-4466-b76c-ee5a7c104c82:2:1:knowledge_question_received:-",
+              "conversation_id": "c3ab3738-d860-4466-b76c-ee5a7c104c82",
+              "version": 2,
+              "event_type": "knowledge_question_received",
+              "task_id": null,
+              "payload": {
+                "act_id": "a1"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 2072.94,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "act_1": true,
+            "decision_actions": true,
+            "task_statuses": true,
+            "pending_question": true,
+            "internal_task_ids_hidden": true,
+            "reply_contains": true
+          },
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "new_topic_interrupts_clarification-taxonomy-v1",
+    "category": "clarification",
+    "description": "未回答物流订单号澄清时，显式发起退款应暂存而非覆盖旧澄清。",
+    "conversation_id": "a8beb67e-34a6-4720-b6fd-4cb1c8af346c",
+    "passed": true,
+    "turns": [
+      {
+        "turn": 1,
+        "message": "帮我查一下物流",
+        "expected": {
+          "intents": [
+            "logistics.track"
+          ],
+          "decision_actions": [
+            "clarify"
+          ],
+          "pending_clarification": "parameter",
+          "task_statuses": {}
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "a8beb67e-34a6-4720-b6fd-4cb1c8af346c",
+          "reply": "请提供要查询物流的订单号。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "logistics.track",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {},
+                "utterance_span": "帮我查一下物流",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [
+              {
+                "kind": "parameter",
+                "candidate_values": [],
+                "target_slot": "order_id",
+                "target_act_id": "a1",
+                "reason": "用户要查物流但未提供订单号"
+              }
+            ],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "clarify",
+                "act_id": null,
+                "task_id": null,
+                "task_type": null,
+                "entities": {},
+                "question": "请提供要查询物流的订单号。",
+                "clarification": {
+                  "clarification_id": "f63516de-bedc-544b-ba9c-6868a34f043d",
+                  "kind": "parameter",
+                  "question": "请提供要查询物流的订单号。",
+                  "original_message": "帮我查一下物流",
+                  "candidate_values": [],
+                  "candidate_task_ids": [],
+                  "target_act_id": "a1",
+                  "target_ambiguity_index": 0,
+                  "target_slot": "order_id",
+                  "preserved_entities": {},
+                  "original_acts": [
+                    {
+                      "act_id": "a1",
+                      "business_intent": "logistics.track",
+                      "dialogue_act": "start_task",
+                      "target_hint": "new_task",
+                      "referenced_task_id": null,
+                      "entities": {},
+                      "utterance_span": "帮我查一下物流",
+                      "uncertainty": "low"
+                    }
+                  ],
+                  "original_ambiguities": [
+                    {
+                      "kind": "parameter",
+                      "candidate_values": [],
+                      "target_slot": "order_id",
+                      "target_act_id": "a1",
+                      "reason": "用户要查物流但未提供订单号"
+                    }
+                  ],
+                  "original_relations": []
+                },
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": true
+          },
+          "state": {
+            "conversation_id": "a8beb67e-34a6-4720-b6fd-4cb1c8af346c",
+            "version": 1,
+            "tasks": [],
+            "active_task_id": null,
+            "current_focus": {
+              "kind": "none",
+              "task_id": null,
+              "intent": null
+            },
+            "pending_question": null,
+            "pending_clarification": {
+              "clarification_id": "f63516de-bedc-544b-ba9c-6868a34f043d",
+              "kind": "parameter",
+              "question": "请提供要查询物流的订单号。",
+              "original_message": "帮我查一下物流",
+              "candidate_values": [],
+              "candidate_task_ids": [],
+              "target_act_id": "a1",
+              "target_ambiguity_index": 0,
+              "target_slot": "order_id",
+              "preserved_entities": {},
+              "original_acts": [
+                {
+                  "act_id": "a1",
+                  "business_intent": "logistics.track",
+                  "dialogue_act": "start_task",
+                  "target_hint": "new_task",
+                  "referenced_task_id": null,
+                  "entities": {},
+                  "utterance_span": "帮我查一下物流",
+                  "uncertainty": "low"
+                }
+              ],
+              "original_ambiguities": [
+                {
+                  "kind": "parameter",
+                  "candidate_values": [],
+                  "target_slot": "order_id",
+                  "target_act_id": "a1",
+                  "reason": "用户要查物流但未提供订单号"
+                }
+              ],
+              "original_relations": []
+            },
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "a8beb67e-34a6-4720-b6fd-4cb1c8af346c:1:1:clarification_requested:-",
+              "conversation_id": "a8beb67e-34a6-4720-b6fd-4cb1c8af346c",
+              "version": 1,
+              "event_type": "clarification_requested",
+              "task_id": null,
+              "payload": {
+                "clarification_id": "f63516de-bedc-544b-ba9c-6868a34f043d",
+                "kind": "parameter",
+                "question": "请提供要查询物流的订单号。"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1908.95,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "decision_actions": true,
+            "task_statuses": true,
+            "pending_clarification": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 2,
+        "message": "我想改成申请退款",
+        "expected": {
+          "intents": [
+            "refund.apply"
+          ],
+          "decision_actions": [
+            "interrupt_clarification",
+            "create_task"
+          ],
+          "event_types": [
+            "clarification_interrupted",
+            "task_created"
+          ],
+          "task_statuses": {
+            "refund": [
+              "collecting"
+            ]
+          },
+          "pending_clarification": null,
+          "pending_question": {
+            "task_type": "refund",
+            "slot_name": "order_id"
+          }
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "a8beb67e-34a6-4720-b6fd-4cb1c8af346c",
+          "reply": "已为你建立退款任务。请提供订单号。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {},
+                "utterance_span": "我想改成申请退款",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "interrupt_clarification",
+                "act_id": null,
+                "task_id": null,
+                "task_type": null,
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": "f63516de-bedc-544b-ba9c-6868a34f043d",
+                "reason": "explicit_new_task_interrupts_pending_clarification"
+              },
+              {
+                "action": "create_task",
+                "act_id": "a1",
+                "task_id": "6d334511-81f8-5328-8272-2c4bea09e78a",
+                "task_type": "refund",
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "a8beb67e-34a6-4720-b6fd-4cb1c8af346c",
+            "version": 2,
+            "tasks": [
+              {
+                "task_id": "6d334511-81f8-5328-8272-2c4bea09e78a",
+                "type": "refund",
+                "status": "collecting",
+                "slots": {}
+              }
+            ],
+            "active_task_id": "6d334511-81f8-5328-8272-2c4bea09e78a",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "6d334511-81f8-5328-8272-2c4bea09e78a",
+              "intent": null
+            },
+            "pending_question": {
+              "task_id": "6d334511-81f8-5328-8272-2c4bea09e78a",
+              "slot_name": "order_id",
+              "question": "请提供订单号。"
+            },
+            "pending_clarification": null,
+            "suspended_clarifications": [
+              {
+                "clarification_id": "f63516de-bedc-544b-ba9c-6868a34f043d",
+                "kind": "parameter",
+                "question": "请提供要查询物流的订单号。",
+                "original_message": "帮我查一下物流",
+                "candidate_values": [],
+                "candidate_task_ids": [],
+                "target_act_id": "a1",
+                "target_ambiguity_index": 0,
+                "target_slot": "order_id",
+                "preserved_entities": {},
+                "original_acts": [
+                  {
+                    "act_id": "a1",
+                    "business_intent": "logistics.track",
+                    "dialogue_act": "start_task",
+                    "target_hint": "new_task",
+                    "referenced_task_id": null,
+                    "entities": {},
+                    "utterance_span": "帮我查一下物流",
+                    "uncertainty": "low"
+                  }
+                ],
+                "original_ambiguities": [
+                  {
+                    "kind": "parameter",
+                    "candidate_values": [],
+                    "target_slot": "order_id",
+                    "target_act_id": "a1",
+                    "reason": "用户要查物流但未提供订单号"
+                  }
+                ],
+                "original_relations": []
+              }
+            ]
+          },
+          "events": [
+            {
+              "event_id": "a8beb67e-34a6-4720-b6fd-4cb1c8af346c:2:1:clarification_interrupted:-",
+              "conversation_id": "a8beb67e-34a6-4720-b6fd-4cb1c8af346c",
+              "version": 2,
+              "event_type": "clarification_interrupted",
+              "task_id": null,
+              "payload": {
+                "clarification_id": "f63516de-bedc-544b-ba9c-6868a34f043d"
+              }
+            },
+            {
+              "event_id": "a8beb67e-34a6-4720-b6fd-4cb1c8af346c:2:2:task_created:6d334511-81f8-5328-8272-2c4bea09e78a",
+              "conversation_id": "a8beb67e-34a6-4720-b6fd-4cb1c8af346c",
+              "version": 2,
+              "event_type": "task_created",
+              "task_id": "6d334511-81f8-5328-8272-2c4bea09e78a",
+              "payload": {
+                "type": "refund",
+                "slots": {},
+                "status": "collecting"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1227.92,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "decision_actions": true,
+            "event_types": true,
+            "task_statuses": true,
+            "pending_question": true,
+            "pending_clarification": true,
+            "internal_task_ids_hidden": true
+          },
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "ambiguous_request_clarifies_without_mutation-taxonomy-v1",
+    "category": "ambiguity_safety",
+    "description": "没有明确业务意图时询问澄清，不猜测创建任务。",
+    "conversation_id": "bee022f3-0005-4fc3-9da6-99a542165519",
+    "passed": true,
+    "turns": [
+      {
+        "turn": 1,
+        "message": "帮我处理一下这个",
+        "expected": {
+          "ambiguities_required": [
+            "intent"
+          ],
+          "decision_actions": [
+            "clarify"
+          ],
+          "event_types": [
+            "clarification_requested"
+          ],
+          "task_statuses": {},
+          "pending_clarification": "intent",
+          "reply_contains": [
+            "申请退款",
+            "查询物流"
+          ]
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "bee022f3-0005-4fc3-9da6-99a542165519",
+          "reply": "你是想申请退款、查询物流，还是咨询退款政策？",
+          "understanding": {
+            "acts": [],
+            "ambiguities": [
+              {
+                "kind": "intent",
+                "candidate_values": [
+                  "refund.apply",
+                  "logistics.track",
+                  "policy.consult"
+                ],
+                "target_slot": null,
+                "target_act_id": null,
+                "reason": "用户说“帮我处理一下这个”，未说明具体业务（退款、物流还是政策咨询），也没有可用的上下文或任务可消歧"
+              }
+            ],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "clarify",
+                "act_id": null,
+                "task_id": null,
+                "task_type": null,
+                "entities": {},
+                "question": "你是想申请退款、查询物流，还是咨询退款政策？",
+                "clarification": {
+                  "clarification_id": "29ab3508-b2eb-5927-900f-350a3c89576d",
+                  "kind": "intent",
+                  "question": "你是想申请退款、查询物流，还是咨询退款政策？",
+                  "original_message": "帮我处理一下这个",
+                  "candidate_values": [
+                    "refund.apply",
+                    "logistics.track",
+                    "policy.consult"
+                  ],
+                  "candidate_task_ids": [],
+                  "target_act_id": null,
+                  "target_ambiguity_index": 0,
+                  "target_slot": null,
+                  "preserved_entities": {},
+                  "original_acts": [],
+                  "original_ambiguities": [
+                    {
+                      "kind": "intent",
+                      "candidate_values": [
+                        "refund.apply",
+                        "logistics.track",
+                        "policy.consult"
+                      ],
+                      "target_slot": null,
+                      "target_act_id": null,
+                      "reason": "用户说“帮我处理一下这个”，未说明具体业务（退款、物流还是政策咨询），也没有可用的上下文或任务可消歧"
+                    }
+                  ],
+                  "original_relations": []
+                },
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": true
+          },
+          "state": {
+            "conversation_id": "bee022f3-0005-4fc3-9da6-99a542165519",
+            "version": 1,
+            "tasks": [],
+            "active_task_id": null,
+            "current_focus": {
+              "kind": "none",
+              "task_id": null,
+              "intent": null
+            },
+            "pending_question": null,
+            "pending_clarification": {
+              "clarification_id": "29ab3508-b2eb-5927-900f-350a3c89576d",
+              "kind": "intent",
+              "question": "你是想申请退款、查询物流，还是咨询退款政策？",
+              "original_message": "帮我处理一下这个",
+              "candidate_values": [
+                "refund.apply",
+                "logistics.track",
+                "policy.consult"
+              ],
+              "candidate_task_ids": [],
+              "target_act_id": null,
+              "target_ambiguity_index": 0,
+              "target_slot": null,
+              "preserved_entities": {},
+              "original_acts": [],
+              "original_ambiguities": [
+                {
+                  "kind": "intent",
+                  "candidate_values": [
+                    "refund.apply",
+                    "logistics.track",
+                    "policy.consult"
+                  ],
+                  "target_slot": null,
+                  "target_act_id": null,
+                  "reason": "用户说“帮我处理一下这个”，未说明具体业务（退款、物流还是政策咨询），也没有可用的上下文或任务可消歧"
+                }
+              ],
+              "original_relations": []
+            },
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "bee022f3-0005-4fc3-9da6-99a542165519:1:1:clarification_requested:-",
+              "conversation_id": "bee022f3-0005-4fc3-9da6-99a542165519",
+              "version": 1,
+              "event_type": "clarification_requested",
+              "task_id": null,
+              "payload": {
+                "clarification_id": "29ab3508-b2eb-5927-900f-350a3c89576d",
+                "kind": "intent",
+                "question": "你是想申请退款、查询物流，还是咨询退款政策？"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1728.23,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "ambiguities_required": true,
+            "decision_actions": true,
+            "event_types": true,
+            "task_statuses": true,
+            "pending_clarification": true,
+            "reply_contains": true
+          },
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "unsupported_request_is_not_misrouted-taxonomy-v1",
+    "category": "out_of_scope",
+    "description": "与退款、物流无关的请求不应生成业务任务。",
+    "conversation_id": "e6f1f3b9-94e5-4497-afef-d848ad89ed50",
+    "passed": true,
+    "turns": [
+      {
+        "turn": 1,
+        "message": "帮我订一张明天去上海的火车票",
+        "expected": {
+          "ambiguities_required": [
+            "intent"
+          ],
+          "decision_actions": [
+            "clarify"
+          ],
+          "task_statuses": {},
+          "pending_clarification": "intent",
+          "reply_contains": [
+            "申请退款",
+            "查询物流"
+          ]
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "e6f1f3b9-94e5-4497-afef-d848ad89ed50",
+          "reply": "你是想申请退款、查询物流，还是咨询退款政策？",
+          "understanding": {
+            "acts": [],
+            "ambiguities": [
+              {
+                "kind": "intent",
+                "candidate_values": [],
+                "target_slot": null,
+                "target_act_id": null,
+                "reason": "用户请求订火车票，不属于退款、物流、售后政策等受支持业务范围"
+              }
+            ],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "clarify",
+                "act_id": null,
+                "task_id": null,
+                "task_type": null,
+                "entities": {},
+                "question": "你是想申请退款、查询物流，还是咨询退款政策？",
+                "clarification": {
+                  "clarification_id": "f68de5a3-ff19-59b7-bd96-d41d89d55544",
+                  "kind": "intent",
+                  "question": "你是想申请退款、查询物流，还是咨询退款政策？",
+                  "original_message": "帮我订一张明天去上海的火车票",
+                  "candidate_values": [],
+                  "candidate_task_ids": [],
+                  "target_act_id": null,
+                  "target_ambiguity_index": 0,
+                  "target_slot": null,
+                  "preserved_entities": {},
+                  "original_acts": [],
+                  "original_ambiguities": [
+                    {
+                      "kind": "intent",
+                      "candidate_values": [],
+                      "target_slot": null,
+                      "target_act_id": null,
+                      "reason": "用户请求订火车票，不属于退款、物流、售后政策等受支持业务范围"
+                    }
+                  ],
+                  "original_relations": []
+                },
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": true
+          },
+          "state": {
+            "conversation_id": "e6f1f3b9-94e5-4497-afef-d848ad89ed50",
+            "version": 1,
+            "tasks": [],
+            "active_task_id": null,
+            "current_focus": {
+              "kind": "none",
+              "task_id": null,
+              "intent": null
+            },
+            "pending_question": null,
+            "pending_clarification": {
+              "clarification_id": "f68de5a3-ff19-59b7-bd96-d41d89d55544",
+              "kind": "intent",
+              "question": "你是想申请退款、查询物流，还是咨询退款政策？",
+              "original_message": "帮我订一张明天去上海的火车票",
+              "candidate_values": [],
+              "candidate_task_ids": [],
+              "target_act_id": null,
+              "target_ambiguity_index": 0,
+              "target_slot": null,
+              "preserved_entities": {},
+              "original_acts": [],
+              "original_ambiguities": [
+                {
+                  "kind": "intent",
+                  "candidate_values": [],
+                  "target_slot": null,
+                  "target_act_id": null,
+                  "reason": "用户请求订火车票，不属于退款、物流、售后政策等受支持业务范围"
+                }
+              ],
+              "original_relations": []
+            },
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "e6f1f3b9-94e5-4497-afef-d848ad89ed50:1:1:clarification_requested:-",
+              "conversation_id": "e6f1f3b9-94e5-4497-afef-d848ad89ed50",
+              "version": 1,
+              "event_type": "clarification_requested",
+              "task_id": null,
+              "payload": {
+                "clarification_id": "f68de5a3-ff19-59b7-bd96-d41d89d55544",
+                "kind": "intent",
+                "question": "你是想申请退款、查询物流，还是咨询退款政策？"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1574.16,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "ambiguities_required": true,
+            "decision_actions": true,
+            "task_statuses": true,
+            "pending_clarification": true,
+            "reply_contains": true
+          },
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "cancel_only_matching_business_task-taxonomy-v1",
+    "category": "task_targeting",
+    "description": "退款和物流任务并存时，取消退款只能结束退款任务。",
+    "conversation_id": "811a1812-ce45-41ca-a877-d67228b4721e",
+    "passed": true,
+    "turns": [
+      {
+        "turn": 1,
+        "message": "帮我查物流，订单号 L30001",
+        "expected": {
+          "intents": [
+            "logistics.track"
+          ],
+          "decision_actions": [
+            "create_task"
+          ],
+          "task_statuses": {
+            "logistics": [
+              "ready"
+            ]
+          }
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "811a1812-ce45-41ca-a877-d67228b4721e",
+          "reply": "已为你建立物流查询任务。订单信息已齐备；当前还没有连接真实物流查询服务。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "logistics.track",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {
+                  "order_id": "L30001"
+                },
+                "utterance_span": "帮我查物流，订单号 L30001",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "create_task",
+                "act_id": "a1",
+                "task_id": "80bcea7f-7bb0-5dbc-be53-b49d66ac0cfc",
+                "task_type": "logistics",
+                "entities": {
+                  "order_id": "L30001"
+                },
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "811a1812-ce45-41ca-a877-d67228b4721e",
+            "version": 1,
+            "tasks": [
+              {
+                "task_id": "80bcea7f-7bb0-5dbc-be53-b49d66ac0cfc",
+                "type": "logistics",
+                "status": "ready",
+                "slots": {
+                  "order_id": "L30001"
+                }
+              }
+            ],
+            "active_task_id": "80bcea7f-7bb0-5dbc-be53-b49d66ac0cfc",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "80bcea7f-7bb0-5dbc-be53-b49d66ac0cfc",
+              "intent": null
+            },
+            "pending_question": null,
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "811a1812-ce45-41ca-a877-d67228b4721e:1:1:task_created:80bcea7f-7bb0-5dbc-be53-b49d66ac0cfc",
+              "conversation_id": "811a1812-ce45-41ca-a877-d67228b4721e",
+              "version": 1,
+              "event_type": "task_created",
+              "task_id": "80bcea7f-7bb0-5dbc-be53-b49d66ac0cfc",
+              "payload": {
+                "type": "logistics",
+                "slots": {
+                  "order_id": "L30001"
+                },
+                "status": "ready"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1824.82,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "decision_actions": true,
+            "task_statuses": true,
+            "internal_task_ids_hidden": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 2,
+        "message": "我还要申请退款，订单号 R30001，原因是商品不合适",
+        "expected": {
+          "intents": [
+            "refund.apply"
+          ],
+          "decision_actions": [
+            "create_task"
+          ],
+          "task_statuses": {
+            "logistics": [
+              "ready"
+            ],
+            "refund": [
+              "ready"
+            ]
+          }
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "811a1812-ce45-41ca-a877-d67228b4721e",
+          "reply": "已为你建立退款任务。所需信息已齐备；当前还没有连接真实退款服务。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {
+                  "order_id": "R30001",
+                  "reason": "商品不合适"
+                },
+                "utterance_span": "我还要申请退款，订单号 R30001，原因是商品不合适",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "create_task",
+                "act_id": "a1",
+                "task_id": "b7ba7d5c-80c7-5990-b7ef-7a6d9a0d1987",
+                "task_type": "refund",
+                "entities": {
+                  "order_id": "R30001",
+                  "reason": "商品不合适"
+                },
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "811a1812-ce45-41ca-a877-d67228b4721e",
+            "version": 2,
+            "tasks": [
+              {
+                "task_id": "80bcea7f-7bb0-5dbc-be53-b49d66ac0cfc",
+                "type": "logistics",
+                "status": "ready",
+                "slots": {
+                  "order_id": "L30001"
+                }
+              },
+              {
+                "task_id": "b7ba7d5c-80c7-5990-b7ef-7a6d9a0d1987",
+                "type": "refund",
+                "status": "ready",
+                "slots": {
+                  "order_id": "R30001",
+                  "reason": "商品不合适"
+                }
+              }
+            ],
+            "active_task_id": "b7ba7d5c-80c7-5990-b7ef-7a6d9a0d1987",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "b7ba7d5c-80c7-5990-b7ef-7a6d9a0d1987",
+              "intent": null
+            },
+            "pending_question": null,
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "811a1812-ce45-41ca-a877-d67228b4721e:2:1:task_created:b7ba7d5c-80c7-5990-b7ef-7a6d9a0d1987",
+              "conversation_id": "811a1812-ce45-41ca-a877-d67228b4721e",
+              "version": 2,
+              "event_type": "task_created",
+              "task_id": "b7ba7d5c-80c7-5990-b7ef-7a6d9a0d1987",
+              "payload": {
+                "type": "refund",
+                "slots": {
+                  "order_id": "R30001",
+                  "reason": "商品不合适"
+                },
+                "status": "ready"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 2135.21,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "decision_actions": true,
+            "task_statuses": true,
+            "internal_task_ids_hidden": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 3,
+        "message": "取消退款申请",
+        "expected": {
+          "intents": [
+            "refund.apply"
+          ],
+          "acts": [
+            {
+              "business_intent": "refund.apply",
+              "dialogue_act": [
+                "cancel",
+                "cancel_task"
+              ]
+            }
+          ],
+          "decision_actions": [
+            "cancel_task"
+          ],
+          "event_types": [
+            "task_cancelled"
+          ],
+          "task_statuses": {
+            "logistics": [
+              "ready"
+            ],
+            "refund": [
+              "cancelled"
+            ]
+          }
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "811a1812-ce45-41ca-a877-d67228b4721e",
+          "reply": "已取消这项退款申请。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "cancel",
+                "target_hint": "active_task",
+                "referenced_task_id": "b7ba7d5c-80c7-5990-b7ef-7a6d9a0d1987",
+                "entities": {},
+                "utterance_span": "取消退款申请",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "cancel_task",
+                "act_id": "a1",
+                "task_id": "b7ba7d5c-80c7-5990-b7ef-7a6d9a0d1987",
+                "task_type": "refund",
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "811a1812-ce45-41ca-a877-d67228b4721e",
+            "version": 3,
+            "tasks": [
+              {
+                "task_id": "80bcea7f-7bb0-5dbc-be53-b49d66ac0cfc",
+                "type": "logistics",
+                "status": "ready",
+                "slots": {
+                  "order_id": "L30001"
+                }
+              },
+              {
+                "task_id": "b7ba7d5c-80c7-5990-b7ef-7a6d9a0d1987",
+                "type": "refund",
+                "status": "cancelled",
+                "slots": {
+                  "order_id": "R30001",
+                  "reason": "商品不合适"
+                }
+              }
+            ],
+            "active_task_id": null,
+            "current_focus": {
+              "kind": "none",
+              "task_id": null,
+              "intent": null
+            },
+            "pending_question": null,
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "811a1812-ce45-41ca-a877-d67228b4721e:3:1:task_cancelled:b7ba7d5c-80c7-5990-b7ef-7a6d9a0d1987",
+              "conversation_id": "811a1812-ce45-41ca-a877-d67228b4721e",
+              "version": 3,
+              "event_type": "task_cancelled",
+              "task_id": "b7ba7d5c-80c7-5990-b7ef-7a6d9a0d1987",
+              "payload": {}
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1769.34,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "act_1": true,
+            "decision_actions": true,
+            "event_types": true,
+            "task_statuses": true,
+            "internal_task_ids_hidden": true
+          },
+          "failures": []
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "ambiguous_old_task_reference-taxonomy-v1",
+    "category": "task_reference",
+    "description": "存在多个可继续任务但用户没有明确指向时，避免随机补参。",
+    "conversation_id": "a13ddaa2-6f71-4d2f-97e7-49570d0a3d5d",
+    "passed": false,
+    "turns": [
+      {
+        "turn": 1,
+        "message": "我要申请退款",
+        "expected": {
+          "intents": [
+            "refund.apply"
+          ],
+          "decision_actions": [
+            "create_task"
+          ],
+          "task_statuses": {
+            "refund": [
+              "collecting"
+            ]
+          }
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "a13ddaa2-6f71-4d2f-97e7-49570d0a3d5d",
+          "reply": "已为你建立退款任务。请提供订单号。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "refund.apply",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {},
+                "utterance_span": "我要申请退款",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "create_task",
+                "act_id": "a1",
+                "task_id": "a14a9446-5c4e-5df2-b4fe-d52ef0d5e716",
+                "task_type": "refund",
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "a13ddaa2-6f71-4d2f-97e7-49570d0a3d5d",
+            "version": 1,
+            "tasks": [
+              {
+                "task_id": "a14a9446-5c4e-5df2-b4fe-d52ef0d5e716",
+                "type": "refund",
+                "status": "collecting",
+                "slots": {}
+              }
+            ],
+            "active_task_id": "a14a9446-5c4e-5df2-b4fe-d52ef0d5e716",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "a14a9446-5c4e-5df2-b4fe-d52ef0d5e716",
+              "intent": null
+            },
+            "pending_question": {
+              "task_id": "a14a9446-5c4e-5df2-b4fe-d52ef0d5e716",
+              "slot_name": "order_id",
+              "question": "请提供订单号。"
+            },
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "a13ddaa2-6f71-4d2f-97e7-49570d0a3d5d:1:1:task_created:a14a9446-5c4e-5df2-b4fe-d52ef0d5e716",
+              "conversation_id": "a13ddaa2-6f71-4d2f-97e7-49570d0a3d5d",
+              "version": 1,
+              "event_type": "task_created",
+              "task_id": "a14a9446-5c4e-5df2-b4fe-d52ef0d5e716",
+              "payload": {
+                "type": "refund",
+                "slots": {},
+                "status": "collecting"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1534.88,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "decision_actions": true,
+            "task_statuses": true,
+            "internal_task_ids_hidden": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 2,
+        "message": "再帮我查一下物流",
+        "expected": {
+          "intents": [
+            "logistics.track"
+          ],
+          "decision_actions": [
+            "create_task"
+          ],
+          "task_statuses": {
+            "refund": [
+              "collecting"
+            ],
+            "logistics": [
+              "collecting"
+            ]
+          },
+          "pending_clarification": null,
+          "event_types": [
+            "task_created"
+          ],
+          "pending_question": {
+            "task_type": "logistics",
+            "slot_name": "order_id"
+          }
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "a13ddaa2-6f71-4d2f-97e7-49570d0a3d5d",
+          "reply": "已为你建立物流查询任务。请提供订单号。",
+          "understanding": {
+            "acts": [
+              {
+                "act_id": "a1",
+                "business_intent": "logistics.track",
+                "dialogue_act": "start_task",
+                "target_hint": "new_task",
+                "referenced_task_id": null,
+                "entities": {},
+                "utterance_span": "再帮我查一下物流",
+                "uncertainty": "low"
+              }
+            ],
+            "ambiguities": [],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "create_task",
+                "act_id": "a1",
+                "task_id": "6865cc4f-0706-52b0-a6e8-e4f540eeee2d",
+                "task_type": "logistics",
+                "entities": {},
+                "question": null,
+                "clarification": null,
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": false
+          },
+          "state": {
+            "conversation_id": "a13ddaa2-6f71-4d2f-97e7-49570d0a3d5d",
+            "version": 2,
+            "tasks": [
+              {
+                "task_id": "a14a9446-5c4e-5df2-b4fe-d52ef0d5e716",
+                "type": "refund",
+                "status": "collecting",
+                "slots": {}
+              },
+              {
+                "task_id": "6865cc4f-0706-52b0-a6e8-e4f540eeee2d",
+                "type": "logistics",
+                "status": "collecting",
+                "slots": {}
+              }
+            ],
+            "active_task_id": "6865cc4f-0706-52b0-a6e8-e4f540eeee2d",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "6865cc4f-0706-52b0-a6e8-e4f540eeee2d",
+              "intent": null
+            },
+            "pending_question": {
+              "task_id": "6865cc4f-0706-52b0-a6e8-e4f540eeee2d",
+              "slot_name": "order_id",
+              "question": "请提供订单号。"
+            },
+            "pending_clarification": null,
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "a13ddaa2-6f71-4d2f-97e7-49570d0a3d5d:2:1:task_created:6865cc4f-0706-52b0-a6e8-e4f540eeee2d",
+              "conversation_id": "a13ddaa2-6f71-4d2f-97e7-49570d0a3d5d",
+              "version": 2,
+              "event_type": "task_created",
+              "task_id": "6865cc4f-0706-52b0-a6e8-e4f540eeee2d",
+              "payload": {
+                "type": "logistics",
+                "slots": {},
+                "status": "collecting"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1575.24,
+        "assessment": {
+          "passed": true,
+          "checks": {
+            "http_status": true,
+            "intents": true,
+            "decision_actions": true,
+            "event_types": true,
+            "task_statuses": true,
+            "pending_question": true,
+            "pending_clarification": true,
+            "internal_task_ids_hidden": true
+          },
+          "failures": []
+        }
+      },
+      {
+        "turn": 3,
+        "message": "那个呢",
+        "expected": {
+          "decision_actions": [
+            "clarify"
+          ],
+          "task_statuses": {
+            "refund": [
+              "collecting"
+            ],
+            "logistics": [
+              "collecting"
+            ]
+          },
+          "pending_clarification": "task",
+          "reply_contains": [
+            "退款任务",
+            "物流查询任务"
+          ],
+          "pending_clarification_candidate_task_types": [
+            "refund",
+            "logistics"
+          ]
+        },
+        "http_status": 200,
+        "response": {
+          "conversation_id": "a13ddaa2-6f71-4d2f-97e7-49570d0a3d5d",
+          "reply": "你是想申请退款、查询物流，还是咨询退款政策？",
+          "understanding": {
+            "acts": [],
+            "ambiguities": [
+              {
+                "kind": "intent",
+                "candidate_values": [],
+                "target_slot": null,
+                "target_act_id": null,
+                "reason": "用户说“那个呢”，没有提供任何参数或明确业务，无法判断是在回答哪个待补问题或提出新请求"
+              }
+            ],
+            "relations": [],
+            "source": "llm",
+            "taxonomy_version": "1.0"
+          },
+          "policy": {
+            "decisions": [
+              {
+                "action": "clarify",
+                "act_id": null,
+                "task_id": null,
+                "task_type": null,
+                "entities": {},
+                "question": "你是想申请退款、查询物流，还是咨询退款政策？",
+                "clarification": {
+                  "clarification_id": "64577bee-57f6-5214-b8cf-b2b5a8f4b32b",
+                  "kind": "intent",
+                  "question": "你是想申请退款、查询物流，还是咨询退款政策？",
+                  "original_message": "那个呢",
+                  "candidate_values": [],
+                  "candidate_task_ids": [],
+                  "target_act_id": null,
+                  "target_ambiguity_index": 0,
+                  "target_slot": null,
+                  "preserved_entities": {},
+                  "original_acts": [],
+                  "original_ambiguities": [
+                    {
+                      "kind": "intent",
+                      "candidate_values": [],
+                      "target_slot": null,
+                      "target_act_id": null,
+                      "reason": "用户说“那个呢”，没有提供任何参数或明确业务，无法判断是在回答哪个待补问题或提出新请求"
+                    }
+                  ],
+                  "original_relations": []
+                },
+                "clarification_id": null,
+                "reason": null
+              }
+            ],
+            "clarification_required": true
+          },
+          "state": {
+            "conversation_id": "a13ddaa2-6f71-4d2f-97e7-49570d0a3d5d",
+            "version": 3,
+            "tasks": [
+              {
+                "task_id": "a14a9446-5c4e-5df2-b4fe-d52ef0d5e716",
+                "type": "refund",
+                "status": "collecting",
+                "slots": {}
+              },
+              {
+                "task_id": "6865cc4f-0706-52b0-a6e8-e4f540eeee2d",
+                "type": "logistics",
+                "status": "collecting",
+                "slots": {}
+              }
+            ],
+            "active_task_id": "6865cc4f-0706-52b0-a6e8-e4f540eeee2d",
+            "current_focus": {
+              "kind": "task",
+              "task_id": "6865cc4f-0706-52b0-a6e8-e4f540eeee2d",
+              "intent": null
+            },
+            "pending_question": {
+              "task_id": "6865cc4f-0706-52b0-a6e8-e4f540eeee2d",
+              "slot_name": "order_id",
+              "question": "请提供订单号。"
+            },
+            "pending_clarification": {
+              "clarification_id": "64577bee-57f6-5214-b8cf-b2b5a8f4b32b",
+              "kind": "intent",
+              "question": "你是想申请退款、查询物流，还是咨询退款政策？",
+              "original_message": "那个呢",
+              "candidate_values": [],
+              "candidate_task_ids": [],
+              "target_act_id": null,
+              "target_ambiguity_index": 0,
+              "target_slot": null,
+              "preserved_entities": {},
+              "original_acts": [],
+              "original_ambiguities": [
+                {
+                  "kind": "intent",
+                  "candidate_values": [],
+                  "target_slot": null,
+                  "target_act_id": null,
+                  "reason": "用户说“那个呢”，没有提供任何参数或明确业务，无法判断是在回答哪个待补问题或提出新请求"
+                }
+              ],
+              "original_relations": []
+            },
+            "suspended_clarifications": []
+          },
+          "events": [
+            {
+              "event_id": "a13ddaa2-6f71-4d2f-97e7-49570d0a3d5d:3:1:clarification_requested:-",
+              "conversation_id": "a13ddaa2-6f71-4d2f-97e7-49570d0a3d5d",
+              "version": 3,
+              "event_type": "clarification_requested",
+              "task_id": null,
+              "payload": {
+                "clarification_id": "64577bee-57f6-5214-b8cf-b2b5a8f4b32b",
+                "kind": "intent",
+                "question": "你是想申请退款、查询物流，还是咨询退款政策？"
+              }
+            }
+          ]
+        },
+        "transport_error": null,
+        "elapsed_ms": 1735.98,
+        "assessment": {
+          "passed": false,
+          "checks": {
+            "http_status": true,
+            "decision_actions": true,
+            "task_statuses": true,
+            "pending_clarification": false,
+            "pending_clarification_candidate_task_types": false,
+            "internal_task_ids_hidden": true,
+            "reply_contains": false
+          },
+          "failures": [
+            "pending_clarification",
+            "pending_clarification_candidate_task_types",
+            "reply_contains"
+          ]
+        }
+      }
+    ]
+  }
+]

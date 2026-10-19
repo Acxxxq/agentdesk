@@ -167,7 +167,7 @@ Turn 1 建立退款任务，Turn 30 用户说“继续最开始那个退款”�
 | 字段 | 示例 | 解释 |
 |---|---|---|
 | act_id | a1 | 本消息中动作的局部编号 |
-| business_intent | logistics / refund / policy_qa / unknown | 业务目的，不等于任务 ID |
+| business_intent | logistics.track / refund.apply / policy.consult / unknown | 业务目的，不等于任务 ID |
 | dialogue_act | start_task / answer_pending / resume / correct / cancel / ask_question / confirm / reject / other | 用户对对话进程做了什么 |
 | target_hint | new_task / active_task / previous_task / explicit_task / unspecified | 只是语义提示，不是最终目标 |
 | referenced_task_id | refund_001 / null | 仅可引用输入中存在的 Task ID，不由模型编造 |
@@ -200,7 +200,7 @@ Turn 1 建立退款任务，Turn 30 用户说“继续最开始那个退款”�
 ```json
 {
   "acts": [{
-    "act_id": "a1", "business_intent": "logistics", "dialogue_act": "start_task",
+    "act_id": "a1", "business_intent": "logistics.track", "dialogue_act": "start_task",
     "target_hint": "new_task", "referenced_task_id": null,
     "entities": {"order_id": "A1001"},
     "utterance_span": "帮我查一下 A1001 的物流", "uncertainty": "low"
@@ -214,8 +214,8 @@ Turn 1 建立退款任务，Turn 30 用户说“继续最开始那个退款”�
 ```json
 {
   "acts": [
-    {"act_id": "a1", "business_intent": "logistics", "dialogue_act": "start_task", "target_hint": "new_task", "referenced_task_id": null, "entities": {"order_id": "A1001"}, "utterance_span": "查 A1001 物流", "uncertainty": "low"},
-    {"act_id": "a2", "business_intent": "refund", "dialogue_act": "start_task", "target_hint": "new_task", "referenced_task_id": null, "entities": {"order_id": "A2002"}, "utterance_span": "申请 A2002 退款", "uncertainty": "low"}
+    {"act_id": "a1", "business_intent": "logistics.track", "dialogue_act": "start_task", "target_hint": "new_task", "referenced_task_id": null, "entities": {"order_id": "A1001"}, "utterance_span": "查 A1001 物流", "uncertainty": "low"},
+    {"act_id": "a2", "business_intent": "refund.apply", "dialogue_act": "start_task", "target_hint": "new_task", "referenced_task_id": null, "entities": {"order_id": "A2002"}, "utterance_span": "申请 A2002 退款", "uncertainty": "low"}
   ],
   "ambiguities": [], "relations": [{"from": "a1", "to": "a2", "kind": "sequence"}], "source": "llm"
 }
@@ -366,7 +366,7 @@ WHERE id = :thread_id AND version = :expected_version;
 from typing import Literal
 from pydantic import BaseModel, Field
 
-Intent = Literal["refund", "logistics", "policy_qa", "unknown"]
+Intent = Literal["refund.apply", "logistics.track", "policy.consult", "unknown"]
 ActType = Literal[
     "start_task", "answer_pending", "resume", "correct", "cancel",
     "ask_question", "confirm", "reject", "other"

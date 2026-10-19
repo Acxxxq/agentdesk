@@ -29,7 +29,7 @@ The local chat route is available only when `APP_ENV=development`. Chat sessions
 
 ## Contract and limits
 
-Input accepts a current message, up to ten recent messages, conversation pointers, and up to twenty task summaries. Output contains zero or more acts, ambiguities, and relationships between acts. Supported intents are `refund`, `logistics`, `policy_qa`, and `unknown`. Entity candidates are limited to `order_id` and `reason` and must appear literally in the current message. Structural validation does not guarantee semantic correctness.
+Input accepts a current message, up to ten recent messages, conversation pointers, and up to twenty task summaries. Output contains acts, ambiguities, relations, and `taxonomy_version: "1.0"`. Business intents are `refund.apply`, `logistics.track`, `policy.consult`, and compatibility fallback `unknown`. Legacy semantic aliases are accepted on input and serialized as canonical IDs; task summary types remain `refund` and `logistics`. See the [taxonomy](INTENT_TAXONOMY.md). Entity candidates are limited to `order_id` and `reason` and must appear literally in the current message. Structural validation does not guarantee semantic correctness.
 
 The provider adapter uses `anthropic.AsyncAnthropic` and a named data-only tool schema. It does not execute tools. SDK retries are disabled. Invalid structured output allows one bounded repair call; timeout and provider errors are not retried. The API returns sanitized error codes.
 

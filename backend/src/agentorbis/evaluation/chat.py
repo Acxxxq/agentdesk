@@ -14,6 +14,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
+from agentorbis.domain.intent_registry import TAXONOMY_VERSION
 from agentorbis.infrastructure.llm.message_interpreter import SYSTEM_PROMPT
 
 
@@ -242,9 +243,12 @@ def run(dataset: Path, output: Path, endpoint: str, model: str, concurrency: int
         "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         "git_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], text=True).strip()),
         "status": "running", "source_hashes": {},
+        "taxonomy_version": TAXONOMY_VERSION,
     }
     for relative in [
         "backend/src/agentorbis/api/chat.py",
+        "backend/src/agentorbis/domain/intent_registry.py",
+        "backend/src/agentorbis/domain/state.py",
         "backend/src/agentorbis/domain/understanding.py",
         "backend/src/agentorbis/domain/dialogue_policy.py",
         "backend/src/agentorbis/domain/state_reducer.py",

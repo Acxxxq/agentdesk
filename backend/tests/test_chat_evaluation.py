@@ -1,12 +1,14 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from agentorbis.domain.dialogue_policy import DialoguePolicy
 from agentorbis.domain.state import ConversationState, TaskState
 from agentorbis.domain.understanding import Ambiguity, MessageUnderstanding
 from agentorbis.evaluation.chat import score_turn
 
-DATASET = Path(__file__).resolve().parents[2] / "evaluation" / "datasets" / "chat_e2e_v1.jsonl"
+DATASET = Path(__file__).resolve().parents[2] / "evaluation" / "datasets" / "chat_e2e_taxonomy_v1.jsonl"
 
 
 def test_chat_e2e_dataset_has_unique_scenarios_and_nonempty_turns():
@@ -20,8 +22,8 @@ def test_chat_e2e_dataset_has_unique_scenarios_and_nonempty_turns():
 
 def test_chat_turn_scorer_checks_task_identity_for_pending_question():
     expected = {
-        "intents": ["refund"],
-        "acts": [{"business_intent": "refund", "entities": {"order_id": "R100"}}],
+        "intents": ["refund.apply"],
+        "acts": [{"business_intent": "refund.apply", "entities": {"order_id": "R100"}}],
         "decision_actions": ["fill_slot"],
         "event_types": ["task_slot_filled"],
         "task_statuses": {"refund": ["collecting"]},
@@ -30,7 +32,7 @@ def test_chat_turn_scorer_checks_task_identity_for_pending_question():
     }
     response = {
         "understanding": {"acts": [{
-            "business_intent": "refund", "dialogue_act": "answer_pending",
+            "business_intent": "refund.apply", "dialogue_act": "answer_pending",
             "target_hint": "active_task", "entities": {"order_id": "R100"},
         }]},
         "policy": {"decisions": [{"action": "fill_slot"}]},
@@ -55,7 +57,8 @@ def test_chat_turn_scorer_retains_http_failures_in_assessment():
     assert result == {"passed": False, "checks": {"http_status": False}, "failures": ["http_status"]}
 
 
-def test_task_ambiguity_uses_business_labels_and_keeps_task_references():
+@pytest.mark.parametrize("candidates", [["refund-1", "logistics-1"], []])
+def test_task_ambiguity_uses_business_labels_and_keeps_task_references(candidates):
     state = ConversationState(
         conversation_id="conversation-1",
         active_task_id="logistics-1",
@@ -67,7 +70,7 @@ def test_task_ambiguity_uses_business_labels_and_keeps_task_references():
     understanding = MessageUnderstanding(
         acts=[],
         ambiguities=[Ambiguity(
-            kind="task", candidate_values=["refund-1", "logistics-1"],
+            kind="task", candidate_values=candidates,
             reason="两个任务都在等订单号，目标不明确",
         )],
         relations=[],

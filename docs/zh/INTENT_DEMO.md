@@ -29,7 +29,7 @@ docker compose exec api python -m agentorbis.intent_demo --request examples/inte
 
 ## 输入、输出与限制
 
-输入包含当前消息、最多十条最近消息、会话指针和最多二十个任务摘要。输出含零个或多个动作、歧义及动作关系。支持的意图为 `refund`、`logistics`、`policy_qa` 和 `unknown`。候选实体仅包括 `order_id`、`reason`，且必须能在当前消息中逐字找到。结构校验通过不等于语义一定正确。
+输入包含当前消息、最多十条最近消息、会话指针和最多二十个任务摘要。输出含零个或多个动作、歧义及动作关系，版本为 `taxonomy_version: "1.0"`。业务意图为 `refund.apply`、`logistics.track`、`policy.consult` 和兼容兜底 `unknown`。旧语义输入别名可恢复，但响应统一使用正式 ID；任务摘要的 type 继续使用 `refund`、`logistics`。详见[分类体系](INTENT_TAXONOMY.md)。候选实体仅包括 `order_id`、`reason`，且必须能在当前消息中逐字找到。结构校验通过不等于语义一定正确。
 
 模型适配器使用 `anthropic.AsyncAnthropic` 和仅用于传输数据的命名工具结构，不会执行工具。SDK 自动重试已关闭。结构化输出不合法时最多再请求一次纠正；超时和供应商错误不重试。API 错误响应经过脱敏。
 

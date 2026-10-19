@@ -9,30 +9,30 @@ def actual(acts):
 
 def test_swapped_order_bindings_fail_even_when_intents_match():
     expected = {"acts": [
-        {"business_intent": "logistics", "entities": {"order_id": "A1001"}},
-        {"business_intent": "refund", "entities": {"order_id": "A2002"}},
+        {"business_intent": "logistics.track", "entities": {"order_id": "A1001"}},
+        {"business_intent": "refund.apply", "entities": {"order_id": "A2002"}},
     ]}
     result = actual([
-        {"act_id": "a1", "business_intent": "logistics", "entities": {"order_id": "A2002"}},
-        {"act_id": "a2", "business_intent": "refund", "entities": {"order_id": "A1001"}},
+        {"act_id": "a1", "business_intent": "logistics.track", "entities": {"order_id": "A2002"}},
+        {"act_id": "a2", "business_intent": "refund.apply", "entities": {"order_id": "A1001"}},
     ])
     assert not score_case(expected, result, 200)["passed"]
 
 
 def test_missing_act_and_false_positive_are_not_ignored():
-    expected = {"acts": [{"business_intent": "refund", "entities": {}}]}
+    expected = {"acts": [{"business_intent": "refund.apply", "entities": {}}]}
     assert not score_case(expected, actual([]), 200)["passed"]
-    assert not score_case({"acts": []}, actual([{"business_intent": "refund"}]), 200)["passed"]
+    assert not score_case({"acts": []}, actual([{"business_intent": "refund.apply"}]), 200)["passed"]
 
 
 def test_act_order_can_differ_but_relation_must_reference_correct_acts():
     expected = {"acts": [
-        {"business_intent": "logistics", "entities": {"order_id": "A1001"}},
-        {"business_intent": "refund", "entities": {"order_id": "A2002"}},
+        {"business_intent": "logistics.track", "entities": {"order_id": "A1001"}},
+        {"business_intent": "refund.apply", "entities": {"order_id": "A2002"}},
     ], "relations": [{"source_index": 0, "target_index": 1, "kind": "sequence"}]}
     result = actual([
-        {"act_id": "b", "business_intent": "refund", "entities": {"order_id": "A2002"}},
-        {"act_id": "a", "business_intent": "logistics", "entities": {"order_id": "A1001"}},
+        {"act_id": "b", "business_intent": "refund.apply", "entities": {"order_id": "A2002"}},
+        {"act_id": "a", "business_intent": "logistics.track", "entities": {"order_id": "A1001"}},
     ])
     result["relations"] = [{"source_act_id": "a", "target_act_id": "b", "kind": "sequence"}]
     assert score_case(expected, result, 200)["passed"]

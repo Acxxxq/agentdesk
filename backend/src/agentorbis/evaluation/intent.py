@@ -16,6 +16,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
+from agentorbis.domain.intent_registry import TAXONOMY_VERSION
 from agentorbis.domain.understanding import MessageUnderstanding
 from agentorbis.infrastructure.llm.message_interpreter import SYSTEM_PROMPT
 
@@ -211,6 +212,7 @@ def main():
         "dataset": str(args.dataset), "dataset_sha256": hashlib.sha256(dataset_bytes).hexdigest(),
         "model": args.model, "endpoint": args.endpoint, "concurrency": args.concurrency,
         "repeats": args.repeats, "prompt_sha256": hashlib.sha256(SYSTEM_PROMPT.encode()).hexdigest(),
+        "taxonomy_version": TAXONOMY_VERSION,
         "git_commit": subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip(),
         "git_dirty": bool(subprocess.check_output(["git","status","--porcelain"],text=True).strip()),
         "source_hashes": {}, "status": "running",
@@ -218,7 +220,8 @@ def main():
     # 数据集固定放在仓库根目录 evaluation/datasets 下，因此向上两级得到仓库根目录。
     repo = args.dataset.resolve().parents[2]
     # 冻结评分器和产品契约/提示词，避免未提交代码只靠 Git 提交号无法复现。
-    for relative in ["backend/src/agentorbis/domain/understanding.py",
+    for relative in ["backend/src/agentorbis/domain/intent_registry.py",
+                     "backend/src/agentorbis/domain/understanding.py",
                      "backend/src/agentorbis/infrastructure/llm/message_interpreter.py",
                      "backend/src/agentorbis/evaluation/intent.py"]:
         data = (repo/relative).read_bytes()

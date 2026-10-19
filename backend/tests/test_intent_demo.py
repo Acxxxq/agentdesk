@@ -17,7 +17,7 @@ from agentorbis.infrastructure.llm.message_interpreter import (
 def act(**changes):
     """构造默认物流语义动作，可覆盖字段以验证边界。"""
     return {
-        "act_id": "a1", "business_intent": "logistics", "dialogue_act": "start_task",
+        "act_id": "a1", "business_intent": "logistics.track", "dialogue_act": "start_task",
         "target_hint": "new_task", "referenced_task_id": None,
         "entities": {"order_id": "A1001"}, "utterance_span": "查 A1001 物流",
         "uncertainty": "low", **changes,
@@ -70,7 +70,7 @@ def test_topic_switch_is_understood_without_mutating_context():
     })
     before = request.model_dump()
     result, captured = execute(understanding(), request)
-    assert result.acts[0].business_intent == "logistics"
+    assert result.acts[0].business_intent == "logistics.track"
     assert result.acts[0].target_hint == "new_task"
     assert result.source == "llm"
     assert request.model_dump() == before
@@ -80,13 +80,19 @@ def test_topic_switch_is_understood_without_mutating_context():
 
 
 def test_preserves_multiple_acts_and_order():
-    second = act(act_id="a2", business_intent="refund", utterance_span="申请 A2002 退款",
+    second = act(act_id="a2", business_intent="refund.apply", utterance_span="申请 A2002 退款",
                  entities={"order_id": "A2002"})
     result, _ = execute(understanding([act(), second], relations=[{
         "source_act_id": "a1", "target_act_id": "a2", "kind": "sequence", "condition": None,
     }]), InterpretationRequest(message="查 A1001 物流，再申请 A2002 退款"))
-    assert [a.business_intent for a in result.acts] == ["logistics", "refund"]
+    assert [a.business_intent for a in result.acts] == ["logistics.track", "refund.apply"]
     assert result.relations[0].kind == "sequence"
+
+
+def test_legacy_provider_label_is_normalized_at_sdk_boundary():
+    result, _ = execute(understanding([act(business_intent="logistics")]))
+    assert result.acts[0].business_intent == "logistics.track"
+    assert result.model_dump()["taxonomy_version"] == "1.0"
 
 
 def test_unknown_task_reference_is_rejected():
@@ -99,7 +105,7 @@ def test_payload_wrapper_preserves_logistics_intent_and_ambiguity():
     payload = understanding([act(entities={}, utterance_span=request.message, uncertainty="medium")],
                             ambiguities=[{"kind": "parameter", "candidate_values": [], "reason": "请确认订单号"}])
     result, _ = execute({"payload": payload}, request)
-    assert result.acts[0].business_intent == "logistics"
+    assert result.acts[0].business_intent == "logistics.track"
     assert result.acts[0].entities == {}
     assert result.ambiguities[0].kind == "parameter"
 
@@ -151,9 +157,29 @@ def test_provider_error_is_sanitized():
 
 def test_invalid_output_gets_one_bounded_repair():
     result, requests = execute({}, next_payload=understanding())
-    assert result.acts[0].business_intent == "logistics"
+    assert result.acts[0].business_intent == "logistics.track"
     assert len(requests) == 2
     assert "前一次工具参数" in requests[1]["system"]
+
+
+def test_repair_receives_only_fixed_evidence_issue_not_raw_provider_output():
+    invalid = understanding([act(utterance_span="不存在的改写片段")])
+    result, requests = execute(invalid, next_payload=understanding())
+    assert result.acts[0].business_intent == "logistics.track"
+    assert len(requests) == 2
+    assert "不是输入的连续原文" in requests[1]["system"]
+    assert "不存在的改写片段" not in requests[1]["system"]
+
+
+def test_parallel_acts_may_share_the_same_verbatim_message():
+    message = "查 A1001 和 B2002 两个订单的物流"
+    payload = understanding([
+        act(utterance_span=message),
+        act(act_id="a2", entities={"order_id": "B2002"}, utterance_span=message),
+    ], relations=[{"source_act_id": "a1", "target_act_id": "a2", "kind": "parallel"}])
+    result, requests = execute(payload, InterpretationRequest(message=message))
+    assert len(result.acts) == 2
+    assert len(requests) == 1
 
 
 def test_request_rejects_whitespace_and_unknown_context_task():
@@ -207,6 +233,9 @@ def test_api_returns_interpretation_and_sanitized_failure(monkeypatch):
     monkeypatch.setenv("APP_ENV", "development")
     with TestClient(app) as client:
         app.state.interpreter = StubInterpreter()
-        assert client.post("/api/v1/interpret", json={"message": "查 A1001 物流"}).json()["source"] == "llm"
+        response = client.post("/api/v1/interpret", json={"message": "查 A1001 物流"}).json()
+        assert response["source"] == "llm"
+        assert response["taxonomy_version"] == "1.0"
+        assert response["acts"][0]["business_intent"] == "logistics.track"
         assert client.post("/api/v1/interpret", json={"message": "超时"}).status_code == 504
         assert client.post("/api/v1/interpret", json={"message": " "}).status_code == 422

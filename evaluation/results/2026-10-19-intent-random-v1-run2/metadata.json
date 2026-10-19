@@ -1,0 +1,19 @@
+{
+  "started_at": "2026-10-19T19:34:39.790678+08:00",
+  "dataset": "evaluation\\datasets\\intent_random_v1.jsonl",
+  "dataset_sha256": "e9e1bbd3d8f28f36a2e947cc3e111a0b2c2efa13bf72ced2a231225097610534",
+  "model": "deepseek-v4-pro",
+  "endpoint": "http://127.0.0.1:18001/api/v1/interpret",
+  "concurrency": 2,
+  "repeats": 1,
+  "prompt_sha256": "776c9571ee5325fe249338dc742b7499341d89e505010247be6a13d0c8aa708e",
+  "git_commit": "e0303d3fb59f8768d3a05f9635e20267d455cdca",
+  "git_dirty": true,
+  "source_hashes": {
+    "backend/src/agentorbis/domain/understanding.py": "431ea1ebffa4974bbf67cc2ab9cd3b79039056dcc3df865e7ed2728d5e5d6267",
+    "backend/src/agentorbis/infrastructure/llm/message_interpreter.py": "e9082952da7588e2ab4169d96d207a7a754c3bdaf13ec6d77e8c4c6248739f38",
+    "backend/src/agentorbis/evaluation/intent.py": "423e25a38d3dec2a5dda044db8074d266e99e4665a5aea0230dba972c20ee5ab"
+  },
+  "status": "completed",
+  "finished_at": "2026-10-19T19:36:33.398801+08:00"
+}

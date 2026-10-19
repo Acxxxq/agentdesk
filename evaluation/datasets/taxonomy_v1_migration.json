@@ -1,0 +1,45 @@
+{
+  "taxonomy_version": "1.0",
+  "aliases": {
+    "refund": "refund.apply",
+    "logistics": "logistics.track",
+    "policy_qa": "policy.consult"
+  },
+  "datasets": [
+    {
+      "source": "intent_v1.jsonl",
+      "target": "intent_taxonomy_v1.jsonl",
+      "cases": 80,
+      "source_sha256": "a46c3cdc197bbdede34e96c373f645b719a4dcd0b052d023ec84f01797d7c67a",
+      "target_sha256": "d02b4aadf2dcb8a1bf117f2f44dae7b715aa64d29c07131a900bbcbc5832e9f0"
+    },
+    {
+      "source": "intent_edge_v1.jsonl",
+      "target": "intent_edge_taxonomy_v1.jsonl",
+      "cases": 24,
+      "source_sha256": "ef502e7ea6ab42ff231d4a9ed3ede13e6872a561093e218d65ab06a9ea31b275",
+      "target_sha256": "15b540f3bbb0178a7bb2a278bc774df649b9549f314cf3ecfcea94c52de2ac0e"
+    },
+    {
+      "source": "intent_random_v2.jsonl",
+      "target": "intent_random_taxonomy_v1.jsonl",
+      "cases": 110,
+      "source_sha256": "fd1dcd0b17210fa6eb5be8dbd49cc08b2e9486717f1c393bbdaa92305396a216",
+      "target_sha256": "44e119331601597c9dc9d13414ca45a7b9f20accde052f2d06b0dd21f05a1fcd"
+    },
+    {
+      "source": "dialogue_policy_v1.jsonl",
+      "target": "dialogue_policy_taxonomy_v1.jsonl",
+      "cases": 7,
+      "source_sha256": "78a881db61cc960f7c4ac41069628d610fce566dd41f2e5d3e179849595b19db",
+      "target_sha256": "397a155d3813f120a95cd38a19e02f72771bbeeafcc941fc31c09f397a9c5353"
+    },
+    {
+      "source": "chat_e2e_v1.jsonl",
+      "target": "chat_e2e_taxonomy_v1.jsonl",
+      "cases": 10,
+      "source_sha256": "f537e865269ce7a6eee2ed05e00f0f6db43cb42844a388d6d02f1f1900c5c0d3",
+      "target_sha256": "35aa5d3cd214ccd26c28f03d144d994b5d66b3efcd5075230669da04d4dcaa3a"
+    }
+  ]
+}

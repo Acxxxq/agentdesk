@@ -59,6 +59,7 @@ docker compose --profile test run --build --rm tests
 ## 文档
 
 - [系统架构](docs/zh/ARCHITECTURE.md)
+- [意图分类体系 v1](docs/zh/INTENT_TAXONOMY.md)
 - [开发路线图](docs/zh/ROADMAP.md)
 - [开发日志](docs/zh/DEVLOG.md)
 - [代码规范与中文注释](docs/zh/CODE_STYLE.md)

@@ -1,3 +1,7 @@
 * text=auto eol=lf
 *.bat text eol=crlf
 *.cmd text eol=crlf
+
+# 冻结评测工件按原始字节归档，避免换行转换使 SHA-256 摘要失效。
+evaluation/datasets/** -text
+evaluation/results/** -text

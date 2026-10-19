@@ -1,5 +1,7 @@
 # Architecture
 
+Business intents use the canonical IDs in [taxonomy v1](INTENT_TAXONOMY.md). The registry defines legacy aliases, task-type mappings, required slots, and capability requirements. Interpretation results include `taxonomy_version: "1.0"`; policy maps business goals to stable task state types.
+
 **Languages:** English | [简体中文](zh/ARCHITECTURE.md)
 
 The first module is a read-only message interpreter. It returns a structured understanding that a later policy layer can review before changing task state.

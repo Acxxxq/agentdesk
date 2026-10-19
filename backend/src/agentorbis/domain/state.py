@@ -2,8 +2,9 @@
 
 from typing import Literal, Self
 
-from pydantic import Field, model_validator
+from pydantic import Field, field_validator, model_validator
 
+from agentorbis.domain.intent_registry import INTENTS
 from agentorbis.domain.understanding import (
     Contract,
     PendingClarificationContext,
@@ -16,8 +17,8 @@ TaskStatus = Literal[
 TaskType = Literal["refund", "logistics"]
 
 REQUIRED_SLOTS: dict[TaskType, tuple[str, ...]] = {
-    "refund": ("order_id", "reason"),
-    "logistics": ("order_id",),
+    definition.task_type: definition.required_slots
+    for definition in INTENTS.values() if definition.task_type is not None
 }
 
 
@@ -65,13 +66,19 @@ class CurrentFocus(Contract):
     task_id: str | None = None
     intent: str | None = None
 
+    @field_validator("intent", mode="before")
+    @classmethod
+    def normalize_legacy_knowledge_focus(cls, value: object) -> object:
+        """恢复旧会话快照时，将旧咨询意图映射为正式 ID。"""
+        return "policy.consult" if value == "policy_qa" else value
+
     @model_validator(mode="after")
     def validate_focus(self) -> Self:
         """确保任务焦点带任务 ID，非任务焦点不带任务 ID。"""
         if (self.kind == "task") != (self.task_id is not None):
             raise ValueError("Task focus must reference exactly one task")
-        if self.kind == "policy_qa" and self.intent != "policy_qa":
-            raise ValueError("Knowledge focus must identify policy_qa")
+        if self.kind == "policy_qa" and self.intent != "policy.consult":
+            raise ValueError("Knowledge focus must identify policy.consult")
         return self
 
 

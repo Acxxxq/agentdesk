@@ -6,7 +6,7 @@ from agentorbis.api.chat import ConversationSession, _make_interpretation_reques
 from agentorbis.domain.state import ConversationState, TaskState
 from agentorbis.evaluation.dialogue import evaluate_dataset
 
-DATASET = Path(__file__).resolve().parents[2] / "evaluation" / "datasets" / "dialogue_policy_v1.jsonl"
+DATASET = Path(__file__).resolve().parents[2] / "evaluation" / "datasets" / "dialogue_policy_taxonomy_v1.jsonl"
 
 
 def test_dialogue_policy_dataset_passes():
@@ -22,7 +22,7 @@ def test_dialogue_policy_dataset_passes():
 
 def test_cancel_and_clarification_are_both_applied_without_replaying_cancel():
     results = evaluate_dataset(DATASET)
-    case = next(item for item in results if item["id"] == "cancel_refund_then_logistics")
+    case = next(item for item in results if item["id"] == "cancel_refund_then_logistics-taxonomy-v1")
 
     assert case["turns"][1]["actual"]["events"] == [
         "task_cancelled", "clarification_requested",
@@ -31,6 +31,15 @@ def test_cancel_and_clarification_are_both_applied_without_replaying_cancel():
     assert case["turns"][2]["actual"]["events"] == [
         "clarification_resolved", "task_created",
     ]
+
+
+def test_legacy_and_canonical_policy_inputs_preserve_behavior():
+    """同一批业务场景只迁移名称时，状态、事件和回复不得改变。"""
+    legacy = evaluate_dataset(DATASET.with_name("dialogue_policy_v1.jsonl"))
+    canonical = evaluate_dataset(DATASET)
+    assert len(legacy) == len(canonical)
+    for before, after in zip(legacy, canonical, strict=True):
+        assert before["turns"] == after["turns"]
 
 
 def test_interpreter_context_keeps_questions_for_all_collecting_tasks():

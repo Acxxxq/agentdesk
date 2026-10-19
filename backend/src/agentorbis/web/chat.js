@@ -9,7 +9,11 @@ let conversationId = sessionStorage.getItem("agentorbis.conversation_id");
 let busy = false;
 
 const labels = {
-  intents: { refund: "申请退款", logistics: "查询物流", policy_qa: "退款政策咨询", unknown: "暂不明确" },
+  intents: {
+    "refund.apply": "申请退款", "logistics.track": "查询物流", "policy.consult": "售后政策咨询",
+    // 历史消息仍可显示旧名称；新接口统一返回正式意图 ID。
+    refund: "申请退款", logistics: "查询物流", policy_qa: "售后政策咨询", unknown: "暂不明确",
+  },
   acts: {
     start_task: "发起新任务", answer_pending: "补充待回答信息", resume: "继续已有任务",
     correct: "更正信息", cancel: "取消任务", ask_question: "知识咨询", confirm: "确认",

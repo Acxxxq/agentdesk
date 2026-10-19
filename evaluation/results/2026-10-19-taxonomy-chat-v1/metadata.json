@@ -1,0 +1,24 @@
+{
+  "started_at": "2026-10-19T23:36:12.467464+08:00",
+  "dataset": "evaluation\\datasets\\chat_e2e_taxonomy_v1.jsonl",
+  "dataset_sha256": "35aa5d3cd214ccd26c28f03d144d994b5d66b3efcd5075230669da04d4dcaa3a",
+  "endpoint": "http://127.0.0.1:18001/api/v1/chat",
+  "model": "deepseek-v4-pro",
+  "concurrency": 1,
+  "prompt_sha256": "bed929f82125c85799f8c2f3dbe99351ecbe3994f600ddb3ad0476286b2ec4e4",
+  "git_commit": "e0303d3fb59f8768d3a05f9635e20267d455cdca",
+  "git_dirty": true,
+  "status": "completed",
+  "source_hashes": {
+    "backend/src/agentorbis/api/chat.py": "e2019052bdf2ecfc3ba275626231d2bb1db5712d83e21f5abd20fd8dcaf3f357",
+    "backend/src/agentorbis/domain/intent_registry.py": "a066a437d290971868f96cfdf5892ac45a879b2820aeeb7179f1105bb3e5f675",
+    "backend/src/agentorbis/domain/state.py": "0a2a0739b702bdfc63599c774f177b28c162230d63d504128de87a3fe2d47bb6",
+    "backend/src/agentorbis/domain/understanding.py": "77f1c89dca3d243ebc3685136f3e5f9422565ca450fd94559883ef5bed2568fc",
+    "backend/src/agentorbis/domain/dialogue_policy.py": "ef4d23e9d554be91fe9c1264f2618dff21ca41f56063cfad0604f0c220184b5f",
+    "backend/src/agentorbis/domain/state_reducer.py": "573836356c48827ca7ddbc4e097a87e570de977962749f853c60a6459c250f02",
+    "backend/src/agentorbis/infrastructure/llm/message_interpreter.py": "97081e27958e5d19599e3b85808beb8681f24fdccc8f591cad794498ab1ad2ef",
+    "backend/src/agentorbis/evaluation/chat.py": "d9ca86f4a5e760a8899ff9a8491a71f9e2331f327fe1c6f4309eec371a176521"
+  },
+  "taxonomy_version": "1.0",
+  "finished_at": "2026-10-19T23:37:05.353523+08:00"
+}

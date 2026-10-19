@@ -54,11 +54,12 @@ See the [Docker guide](docs/DOCKER.md) and [intent demo guide](docs/INTENT_DEMO.
 
 ## Project direction
 
-The intent interpreter is the first real project module. Work is now in the dialogue policy and state reducer stage; persistence and tool execution follow after state behavior is settled. The broader target architecture is documented in [the platform plan](docs/PLATFORM_PLAN.md).
+The intent interpreter is the first real project module. Work is now in the dialogue policy and state reducer stage; persistence and tool execution follow after state behavior is settled. The broader target architecture is documented in [the platform plan (Chinese)](docs/zh/PLATFORM_PLAN.md).
 
 ## Documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
+- [Intent taxonomy v1](docs/INTENT_TAXONOMY.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Development log](docs/DEVLOG.md)
 - [Code style and Chinese comments](docs/CODE_STYLE.md)

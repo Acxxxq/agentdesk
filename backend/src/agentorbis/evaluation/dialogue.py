@@ -1,12 +1,14 @@
 """运行固定语义输入上的多轮对话策略评测。"""
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
 
 from agentorbis.api.chat import _build_reply
 from agentorbis.domain.dialogue_policy import DialoguePolicy
+from agentorbis.domain.intent_registry import TAXONOMY_VERSION
 from agentorbis.domain.state import ConversationState
 from agentorbis.domain.state_reducer import reduce_state
 from agentorbis.domain.understanding import MessageUnderstanding
@@ -93,7 +95,7 @@ def evaluate_dataset(dataset_path: Path) -> list[dict[str, Any]]:
 
 def write_evaluation(dataset_path: Path, output_dir: Path) -> dict[str, Any]:
     """运行评测并写入可复查的逐例结果、摘要和中文报告。"""
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=False)
     results = evaluate_dataset(dataset_path)
     (output_dir / "dataset.jsonl").write_text(dataset_path.read_text(encoding="utf-8"), encoding="utf-8")
     (output_dir / "results.jsonl").write_text(
@@ -102,8 +104,27 @@ def write_evaluation(dataset_path: Path, output_dir: Path) -> dict[str, Any]:
     )
     total_turns = sum(len(item["turns"]) for item in results)
     passed_turns = sum(turn["passed"] for item in results for turn in item["turns"])
+    repo = Path(__file__).resolve().parents[4]
+    source_hashes = {}
+    for relative in (
+        "backend/src/agentorbis/api/chat.py",
+        "backend/src/agentorbis/domain/intent_registry.py",
+        "backend/src/agentorbis/domain/understanding.py",
+        "backend/src/agentorbis/domain/state.py",
+        "backend/src/agentorbis/domain/dialogue_policy.py",
+        "backend/src/agentorbis/domain/state_reducer.py",
+        "backend/src/agentorbis/evaluation/dialogue.py",
+    ):
+        content = (repo / relative).read_bytes()
+        source_hashes[relative] = hashlib.sha256(content).hexdigest()
+        target = output_dir / "source_snapshot" / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(content)
     summary = {
         "dataset": dataset_path.name,
+        "taxonomy_version": TAXONOMY_VERSION,
+        "dataset_sha256": hashlib.sha256(dataset_path.read_bytes()).hexdigest(),
+        "source_hashes": source_hashes,
         "scenario_count": len(results),
         "passed_scenarios": sum(item["passed"] for item in results),
         "turn_count": total_turns,
@@ -120,8 +141,7 @@ def write_evaluation(dataset_path: Path, output_dir: Path) -> dict[str, Any]:
         f"- 场景：{summary['scenario_count']}，通过：{summary['passed_scenarios']}",
         f"- 对话轮次：{total_turns}，通过：{passed_turns}，通过率：{summary['turn_pass_rate']:.0%}",
         "- 评测范围：使用固定语义结构输入，检查 DialoguePolicy、状态归约和用户回复；不调用 LLM。",
-        "- 本轮修复：明确取消可与另一项缺参任务分开处理；澄清只保存未完成动作，补参时不会重放已完成动作。",
-        "- [问题分析与评测边界](analysis.zh-CN.md)",
+        "- 本报告仅验证合成数据中的固定语义输入，不验证自然语言识别或外部业务执行。",
         "",
         "| 场景 | 结果 | 失败断言 |",
         "| --- | --- | --- |",

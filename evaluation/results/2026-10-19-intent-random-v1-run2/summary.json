@@ -1,0 +1,549 @@
+{
+  "metadata": {
+    "started_at": "2026-10-19T19:34:39.790678+08:00",
+    "dataset": "evaluation\\datasets\\intent_random_v1.jsonl",
+    "dataset_sha256": "e9e1bbd3d8f28f36a2e947cc3e111a0b2c2efa13bf72ced2a231225097610534",
+    "model": "deepseek-v4-pro",
+    "endpoint": "http://127.0.0.1:18001/api/v1/interpret",
+    "concurrency": 2,
+    "repeats": 1,
+    "prompt_sha256": "776c9571ee5325fe249338dc742b7499341d89e505010247be6a13d0c8aa708e",
+    "git_commit": "e0303d3fb59f8768d3a05f9635e20267d455cdca",
+    "git_dirty": true,
+    "source_hashes": {
+      "backend/src/agentorbis/domain/understanding.py": "431ea1ebffa4974bbf67cc2ab9cd3b79039056dcc3df865e7ed2728d5e5d6267",
+      "backend/src/agentorbis/infrastructure/llm/message_interpreter.py": "e9082952da7588e2ab4169d96d207a7a754c3bdaf13ec6d77e8c4c6248739f38",
+      "backend/src/agentorbis/evaluation/intent.py": "423e25a38d3dec2a5dda044db8074d266e99e4665a5aea0230dba972c20ee5ab"
+    },
+    "status": "completed",
+    "finished_at": "2026-10-19T19:36:33.398801+08:00"
+  },
+  "overall": {
+    "total": 110,
+    "passed": 91,
+    "failed": 19,
+    "pass_rate": 0.8272727272727273,
+    "http_errors": 0,
+    "latency_ms": {
+      "p50": 2024.58,
+      "p95": 2752.65
+    },
+    "metrics": {
+      "http_status": {
+        "passed": 110,
+        "total": 110,
+        "rate": 1.0
+      },
+      "entity_binding": {
+        "passed": 104,
+        "total": 110,
+        "rate": 0.9454545454545454
+      },
+      "intents": {
+        "passed": 110,
+        "total": 110,
+        "rate": 1.0
+      },
+      "act_count": {
+        "passed": 110,
+        "total": 110,
+        "rate": 1.0
+      },
+      "target_hints": {
+        "passed": 60,
+        "total": 60,
+        "rate": 1.0
+      },
+      "ambiguities": {
+        "passed": 97,
+        "total": 110,
+        "rate": 0.8818181818181818
+      },
+      "dialogue_acts": {
+        "passed": 80,
+        "total": 80,
+        "rate": 1.0
+      },
+      "task_references": {
+        "passed": 60,
+        "total": 60,
+        "rate": 1.0
+      },
+      "relations": {
+        "passed": 110,
+        "total": 110,
+        "rate": 1.0
+      },
+      "response_schema": {
+        "passed": 110,
+        "total": 110,
+        "rate": 1.0
+      }
+    }
+  },
+  "by_category": {
+    "random_alternative_orders": {
+      "total": 10,
+      "passed": 10,
+      "failed": 0,
+      "pass_rate": 1.0,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 2519.53,
+        "p95": 2752.65
+      },
+      "metrics": {
+        "http_status": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "entity_binding": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "intents": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "act_count": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "ambiguities": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "relations": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "response_schema": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        }
+      }
+    },
+    "random_logistics": {
+      "total": 30,
+      "passed": 18,
+      "failed": 12,
+      "pass_rate": 0.6,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 2113.85,
+        "p95": 2913.43
+      },
+      "metrics": {
+        "http_status": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "entity_binding": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "intents": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "act_count": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "target_hints": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "ambiguities": {
+          "passed": 18,
+          "total": 30,
+          "rate": 0.6
+        },
+        "dialogue_acts": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "task_references": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "relations": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "response_schema": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        }
+      }
+    },
+    "random_out_of_scope": {
+      "total": 10,
+      "passed": 10,
+      "failed": 0,
+      "pass_rate": 1.0,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 1540.85,
+        "p95": 1819.59
+      },
+      "metrics": {
+        "http_status": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "entity_binding": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "intents": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "act_count": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "ambiguities": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "relations": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "response_schema": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        }
+      }
+    },
+    "random_policy_question": {
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "pass_rate": 1.0,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 1842.98,
+        "p95": 2175.88
+      },
+      "metrics": {
+        "http_status": {
+          "passed": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "entity_binding": {
+          "passed": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "intents": {
+          "passed": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "act_count": {
+          "passed": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "ambiguities": {
+          "passed": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "dialogue_acts": {
+          "passed": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "relations": {
+          "passed": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "response_schema": {
+          "passed": 20,
+          "total": 20,
+          "rate": 1.0
+        }
+      }
+    },
+    "random_refund": {
+      "total": 30,
+      "passed": 23,
+      "failed": 7,
+      "pass_rate": 0.7666666666666667,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 2025.49,
+        "p95": 3093.01
+      },
+      "metrics": {
+        "http_status": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "entity_binding": {
+          "passed": 24,
+          "total": 30,
+          "rate": 0.8
+        },
+        "intents": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "act_count": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "target_hints": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "ambiguities": {
+          "passed": 29,
+          "total": 30,
+          "rate": 0.9666666666666667
+        },
+        "dialogue_acts": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "task_references": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "relations": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "response_schema": {
+          "passed": 30,
+          "total": 30,
+          "rate": 1.0
+        }
+      }
+    },
+    "random_underspecified": {
+      "total": 10,
+      "passed": 10,
+      "failed": 0,
+      "pass_rate": 1.0,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 1819.55,
+        "p95": 2854.25
+      },
+      "metrics": {
+        "http_status": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "entity_binding": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "intents": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "act_count": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "ambiguities": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "relations": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        },
+        "response_schema": {
+          "passed": 10,
+          "total": 10,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "semantic": {
+    "total": 110,
+    "passed": 91,
+    "failed": 19,
+    "pass_rate": 0.8272727272727273,
+    "http_errors": 0,
+    "latency_ms": {
+      "p50": 2024.58,
+      "p95": 2752.65
+    },
+    "metrics": {
+      "http_status": {
+        "passed": 110,
+        "total": 110,
+        "rate": 1.0
+      },
+      "entity_binding": {
+        "passed": 104,
+        "total": 110,
+        "rate": 0.9454545454545454
+      },
+      "intents": {
+        "passed": 110,
+        "total": 110,
+        "rate": 1.0
+      },
+      "act_count": {
+        "passed": 110,
+        "total": 110,
+        "rate": 1.0
+      },
+      "target_hints": {
+        "passed": 60,
+        "total": 60,
+        "rate": 1.0
+      },
+      "ambiguities": {
+        "passed": 97,
+        "total": 110,
+        "rate": 0.8818181818181818
+      },
+      "dialogue_acts": {
+        "passed": 80,
+        "total": 80,
+        "rate": 1.0
+      },
+      "task_references": {
+        "passed": 60,
+        "total": 60,
+        "rate": 1.0
+      },
+      "relations": {
+        "passed": 110,
+        "total": 110,
+        "rate": 1.0
+      },
+      "response_schema": {
+        "passed": 110,
+        "total": 110,
+        "rate": 1.0
+      }
+    }
+  },
+  "input_validation": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "pass_rate": 0,
+    "http_errors": 0,
+    "latency_ms": {
+      "p50": 0,
+      "p95": 0
+    },
+    "metrics": {}
+  },
+  "by_origin": {
+    "seeded_random_template_generation": {
+      "total": 110,
+      "passed": 91,
+      "failed": 19,
+      "pass_rate": 0.8272727272727273,
+      "http_errors": 0,
+      "latency_ms": {
+        "p50": 2024.58,
+        "p95": 2752.65
+      },
+      "metrics": {
+        "http_status": {
+          "passed": 110,
+          "total": 110,
+          "rate": 1.0
+        },
+        "entity_binding": {
+          "passed": 104,
+          "total": 110,
+          "rate": 0.9454545454545454
+        },
+        "intents": {
+          "passed": 110,
+          "total": 110,
+          "rate": 1.0
+        },
+        "act_count": {
+          "passed": 110,
+          "total": 110,
+          "rate": 1.0
+        },
+        "target_hints": {
+          "passed": 60,
+          "total": 60,
+          "rate": 1.0
+        },
+        "ambiguities": {
+          "passed": 97,
+          "total": 110,
+          "rate": 0.8818181818181818
+        },
+        "dialogue_acts": {
+          "passed": 80,
+          "total": 80,
+          "rate": 1.0
+        },
+        "task_references": {
+          "passed": 60,
+          "total": 60,
+          "rate": 1.0
+        },
+        "relations": {
+          "passed": 110,
+          "total": 110,
+          "rate": 1.0
+        },
+        "response_schema": {
+          "passed": 110,
+          "total": 110,
+          "rate": 1.0
+        }
+      }
+    }
+  }
+}

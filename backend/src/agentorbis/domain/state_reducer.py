@@ -118,7 +118,7 @@ class StateReducer:
 
             if decision.action in {"answer_knowledge", "defer", "reject"}:
                 if decision.action == "answer_knowledge":
-                    next_state.current_focus = CurrentFocus(kind="policy_qa", intent="policy_qa")
+                    next_state.current_focus = CurrentFocus(kind="policy_qa", intent="policy.consult")
                     changed = next_state.current_focus != state.current_focus or changed
                     pending_events.append(("knowledge_question_received", None, {
                         "act_id": decision.act_id,

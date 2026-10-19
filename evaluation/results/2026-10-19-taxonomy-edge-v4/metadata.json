@@ -1,0 +1,21 @@
+{
+  "started_at": "2026-10-19T23:51:13.893620+08:00",
+  "dataset": "evaluation\\datasets\\intent_edge_taxonomy_v1.jsonl",
+  "dataset_sha256": "15b540f3bbb0178a7bb2a278bc774df649b9549f314cf3ecfcea94c52de2ac0e",
+  "model": "deepseek-v4-pro",
+  "endpoint": "http://127.0.0.1:18001/api/v1/interpret",
+  "concurrency": 2,
+  "repeats": 1,
+  "prompt_sha256": "b1509783040cd5acc171f98befd63392c6d964c1d8c16d97536936a3882b5503",
+  "taxonomy_version": "1.0",
+  "git_commit": "e0303d3fb59f8768d3a05f9635e20267d455cdca",
+  "git_dirty": true,
+  "source_hashes": {
+    "backend/src/agentorbis/domain/intent_registry.py": "d6c3bcf4dd9902b5380ed0a6984993569f73a3d5bec4fadb47c1cb1cd71e4bee",
+    "backend/src/agentorbis/domain/understanding.py": "77f1c89dca3d243ebc3685136f3e5f9422565ca450fd94559883ef5bed2568fc",
+    "backend/src/agentorbis/infrastructure/llm/message_interpreter.py": "215acf452926c6627ff6db8d522cc34bd8b86475fe3901d6742cfc28d32e8980",
+    "backend/src/agentorbis/evaluation/intent.py": "561c647afef6686e420ec592fdb8495c22b92e9f73e70ca55137955bb24044ee"
+  },
+  "status": "completed",
+  "finished_at": "2026-10-19T23:51:38.947521+08:00"
+}

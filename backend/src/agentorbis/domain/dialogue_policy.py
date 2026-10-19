@@ -74,6 +74,29 @@ class DialoguePolicy:
             PolicyResult：待归约的决策；其中不包含已执行的工具或数据库操作。
         """
         if state.pending_clarification:
+            # 先绑定本轮歧义，区分明确的新业务缺参和整条消息仍不明确。
+            understanding = understanding.model_copy(update={
+                "ambiguities": self._attribute_ambiguities(understanding),
+            })
+            new_act_ids = {
+                act.act_id for act in understanding.acts
+                if (act.dialogue_act == "start_task" and act.target_hint == "new_task")
+                or (act.business_intent == "policy.consult" and act.dialogue_act == "ask_question")
+            }
+            can_interrupt = bool(new_act_ids) and all(
+                item.kind == "parameter" and item.target_act_id in new_act_ids
+                for item in understanding.ambiguities
+            )
+            prior_intents = {
+                act.business_intent for act in state.pending_clarification.original_acts
+            }
+            different_business = state.pending_clarification.kind != "intent" and bool(prior_intents) and any(
+                act.act_id in new_act_ids and act.business_intent not in prior_intents
+                for act in understanding.acts
+            )
+            # 不先拿新退款的订单号回答旧物流问题；不同业务的明确新目标优先处理。
+            if can_interrupt and different_business:
+                return self._interrupt_with_new_topic(state, understanding, message)
             resumed = self._resolve_clarification(state, understanding, message)
             if resumed is not None:
                 next_understanding, resolution = resumed
@@ -83,21 +106,8 @@ class DialoguePolicy:
                     decisions=[resolution, *plan.decisions],
                     clarification_required=plan.clarification_required,
                 )
-            interrupts_with_new_topic = any(
-                (act.dialogue_act == "start_task" and act.target_hint == "new_task")
-                or (act.business_intent == "policy_qa" and act.dialogue_act == "ask_question")
-                for act in understanding.acts
-            )
-            if interrupts_with_new_topic and not understanding.ambiguities:
-                plan = self._decide_without_pending(state, understanding, message)
-                return PolicyResult(
-                    decisions=[DialogueDecision(
-                        action="interrupt_clarification",
-                        clarification_id=state.pending_clarification.clarification_id,
-                        reason="explicit_new_task_interrupts_pending_clarification",
-                    ), *plan.decisions],
-                    clarification_required=plan.clarification_required,
-                )
+            if can_interrupt:
+                return self._interrupt_with_new_topic(state, understanding, message)
             pending = state.pending_clarification
             return PolicyResult(decisions=[DialogueDecision(
                 action="clarify", clarification=pending, question=pending.question,
@@ -124,6 +134,25 @@ class DialoguePolicy:
                 clarification_required=plan.clarification_required,
             )
         return self._decide_without_pending(state, understanding, message)
+
+    def _interrupt_with_new_topic(
+        self,
+        state: ConversationState,
+        understanding: MessageUnderstanding,
+        message: str,
+    ) -> PolicyResult:
+        """暂存旧澄清并处理明确新目标；新目标缺参仍可提出自己的补问。"""
+        pending = state.pending_clarification
+        if pending is None:
+            raise ValueError("Interrupting clarification requires a pending clarification")
+        plan = self._decide_without_pending(state, understanding, message)
+        return PolicyResult(
+            decisions=[DialogueDecision(
+                action="interrupt_clarification", clarification_id=pending.clarification_id,
+                reason="explicit_new_task_interrupts_pending_clarification",
+            ), *plan.decisions],
+            clarification_required=plan.clarification_required,
+        )
 
     @staticmethod
     def _explicitly_resumes_clarification(message: str) -> bool:
@@ -156,9 +185,9 @@ class DialoguePolicy:
             )
             # 无法归属到单个动作的歧义可能改变整条消息的含义，因此继续阻止业务状态变化。
             decisions = [
-                DialogueDecision(action="answer_knowledge", act_id=act.act_id, reason="policy_qa")
+                DialogueDecision(action="answer_knowledge", act_id=act.act_id, reason="policy.consult")
                 for act in understanding.acts
-                if act.business_intent == "policy_qa" and act.dialogue_act == "ask_question"
+                if act.business_intent == "policy.consult" and act.dialogue_act == "ask_question"
             ]
             decisions.append(DialogueDecision(
                 action="clarify", clarification=clarification, question=clarification.question,
@@ -182,9 +211,9 @@ class DialoguePolicy:
                     reason="conditional_action_waits_for_external_result",
                 ))
                 continue
-            if act.business_intent == "policy_qa" and act.dialogue_act == "ask_question":
+            if act.business_intent == "policy.consult" and act.dialogue_act == "ask_question":
                 decisions.append(DialogueDecision(
-                    action="answer_knowledge", act_id=act.act_id, reason="policy_qa",
+                    action="answer_knowledge", act_id=act.act_id, reason="policy.consult",
                 ))
                 continue
             if act.business_intent == "unknown" or act.dialogue_act in {"reject", "other"}:
@@ -231,7 +260,7 @@ class DialoguePolicy:
                 slot = cls._infer_target_slot(ambiguity, understanding.acts)
                 candidates = [
                     act for act in understanding.acts
-                    if act.business_intent in {"refund", "logistics"}
+                    if act.business_intent in {"refund.apply", "logistics.track"}
                     and act.dialogue_act in {"start_task", "answer_pending", "correct"}
                     and slot is not None and slot not in act.entities
                 ]
@@ -257,7 +286,7 @@ class DialoguePolicy:
     ) -> tuple[DialogueDecision | None, str | None]:
         """为一个状态动作校验任务目标、动作类型和必需参数。"""
         if act.dialogue_act == "start_task":
-            if act.business_intent not in {"refund", "logistics"}:
+            if act.business_intent not in {"refund.apply", "logistics.track"}:
                 return None, None
             if act.target_hint not in {"new_task", "unspecified"}:
                 return None, "start_task_requires_new_target"
@@ -267,7 +296,7 @@ class DialoguePolicy:
             ))
             return DialogueDecision(
                 action="create_task", act_id=act.act_id, task_id=task_id,
-                task_type=act.business_intent, entities=act.entities,
+                task_type=act.task_type, entities=act.entities,
             ), None
 
         if act.dialogue_act == "answer_pending":
@@ -285,7 +314,7 @@ class DialoguePolicy:
             ), None
 
         if act.dialogue_act not in {"resume", "correct", "cancel"}:
-            if act.dialogue_act == "ask_question" and act.business_intent == "policy_qa":
+            if act.dialogue_act == "ask_question" and act.business_intent == "policy.consult":
                 return DialogueDecision(action="answer_knowledge", act_id=act.act_id), None
             return None, None
 
@@ -316,7 +345,7 @@ class DialoguePolicy:
             return None
         tasks = [
             task for task in state.tasks
-            if task.type == act.business_intent and task.status == "collecting"
+            if task.type == act.task_type and task.status == "collecting"
             and slot_name in task.missing_slots
         ]
         if act.referenced_task_id:
@@ -328,7 +357,7 @@ class DialoguePolicy:
         pending = state.pending_question
         if pending and pending.slot_name == slot_name:
             selected = next((task for task in tasks if task.task_id == pending.task_id), None)
-            if selected and selected.type == act.business_intent:
+            if selected and selected.type == act.task_type:
                 return selected
         if len(tasks) == 1:
             return tasks[0]
@@ -339,12 +368,12 @@ class DialoguePolicy:
         tasks = {task.task_id: task for task in state.tasks}
         if act.referenced_task_id:
             task = tasks.get(act.referenced_task_id)
-            if task is None or task.type != act.business_intent:
+            if task is None or task.type != act.task_type:
                 return None, "referenced_task_is_missing_or_wrong_type"
             return task, None
         if act.target_hint == "active_task" and state.active_task_id:
             task = tasks.get(state.active_task_id)
-            if task and task.type == act.business_intent:
+            if task and task.type == act.task_type:
                 return task, None
             return None, "active_task_type_mismatch"
         if act.target_hint == "explicit_task":
@@ -352,12 +381,12 @@ class DialoguePolicy:
         if act.target_hint == "previous_task":
             candidates = [
                 task for task in state.tasks
-                if task.type == act.business_intent and task.status not in TERMINAL_STATUSES
+                if task.type == act.task_type and task.status not in TERMINAL_STATUSES
             ]
         else:
             candidates = [
                 task for task in state.tasks
-                if task.type == act.business_intent and task.status not in TERMINAL_STATUSES
+                if task.type == act.task_type and task.status not in TERMINAL_STATUSES
             ]
         if len(candidates) == 1:
             return candidates[0], None
@@ -406,7 +435,7 @@ class DialoguePolicy:
         if target_act_id is None and ambiguity.kind == "parameter" and target_slot:
             candidates = [
                 act for act in understanding.acts
-                if act.business_intent in {"refund", "logistics"}
+                if act.business_intent in {"refund.apply", "logistics.track"}
                 and act.dialogue_act in {"start_task", "answer_pending", "correct"}
                 and target_slot not in act.entities
             ]
@@ -422,7 +451,7 @@ class DialoguePolicy:
         if target_act_id is None and ambiguity.kind == "parameter":
             candidates = [
                 act for act in understanding.acts
-                if act.business_intent in {"refund", "logistics"}
+                if act.business_intent in {"refund.apply", "logistics.track"}
                 and act.dialogue_act in {"start_task", "answer_pending", "correct"}
                 and target_slot and target_slot not in act.entities
             ]
@@ -550,7 +579,7 @@ class DialoguePolicy:
             if slot == "order_id":
                 if candidates:
                     return f"请确认要处理的订单号：{'、'.join(candidates)}。"
-                task_name = "查询物流" if "logistics" in intents else "申请退款"
+                task_name = "查询物流" if "logistics.track" in intents else "申请退款"
                 return f"请提供要{task_name}的订单号。"
             if slot == "reason":
                 if candidates:
@@ -577,13 +606,13 @@ class DialoguePolicy:
             return "reason"
         actionable = [
             act for act in acts
-            if act.business_intent in {"refund", "logistics"}
+            if act.business_intent in {"refund.apply", "logistics.track"}
             and act.dialogue_act in {"start_task", "answer_pending", "correct"}
         ]
-        if any(act.business_intent == "logistics" for act in actionable):
-            if not any(act.entities.get("order_id") for act in actionable if act.business_intent == "logistics"):
+        if any(act.business_intent == "logistics.track" for act in actionable):
+            if not any(act.entities.get("order_id") for act in actionable if act.business_intent == "logistics.track"):
                 return "order_id"
-        refund_acts = [act for act in actionable if act.business_intent == "refund"]
+        refund_acts = [act for act in actionable if act.business_intent == "refund.apply"]
         if refund_acts:
             has_order = any(act.entities.get("order_id") for act in refund_acts)
             has_reason = any(act.entities.get("reason") for act in refund_acts)
@@ -596,10 +625,10 @@ class DialoguePolicy:
     @staticmethod
     def _candidate_tasks(state: ConversationState, acts: list[MessageAct]) -> list[str]:
         """按歧义动作类型列出仍可继续的候选任务 ID。"""
-        intents = {act.business_intent for act in acts if act.business_intent in {"refund", "logistics"}}
+        intents = {act.task_type for act in acts if act.task_type is not None}
         return [
             task.task_id for task in state.tasks
-            if task.type in intents and task.status not in TERMINAL_STATUSES
+            if (not intents or task.type in intents) and task.status not in TERMINAL_STATUSES
         ]
 
     @staticmethod
@@ -624,11 +653,11 @@ class DialoguePolicy:
         response_act = answer.acts[0]
         selected: MessageUnderstanding | None = None
         if pending.kind == "intent" and response_act.business_intent in {
-            "refund", "logistics", "policy_qa",
+            "refund.apply", "logistics.track", "policy.consult",
         }:
             if len(pending.original_acts) > 1:
                 return None
-            if response_act.business_intent == "policy_qa":
+            if response_act.business_intent == "policy.consult":
                 selected = MessageUnderstanding(acts=[response_act], ambiguities=[], relations=[])
             else:
                 base = pending.original_acts[0] if pending.original_acts else response_act
@@ -666,6 +695,9 @@ class DialoguePolicy:
                     relations=pending.original_relations,
                 )
         elif pending.kind == "parameter":
+            original_intents = {act.business_intent for act in pending.original_acts}
+            if original_intents and response_act.business_intent not in original_intents:
+                return None
             slot = pending.target_slot
             matches: list[tuple[str, str]] = []
             if slot and slot in response_act.entities:
@@ -694,7 +726,7 @@ class DialoguePolicy:
                 if target_act_id is None:
                     candidates = [
                         act for act in original
-                        if act.business_intent in {"refund", "logistics"}
+                        if act.business_intent in {"refund.apply", "logistics.track"}
                         and act.dialogue_act in {"start_task", "answer_pending", "correct"}
                         and slot not in act.entities
                     ]
